@@ -1,4 +1,4 @@
-import { Ingridient } from '../types/ingridient'
+import { Ingridient } from '../../types/ingridient'
 
 interface IngridientsData {
   success: boolean
