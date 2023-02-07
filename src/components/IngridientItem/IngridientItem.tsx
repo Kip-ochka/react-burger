@@ -9,13 +9,19 @@ import { TEXT, TypografyTheme } from '../../utils/variables'
 import cls from './IngridientItem.module.css'
 interface IngridientItemProps {
   ingridient: Ingridient
+  onOpen: (data: Ingridient) => void
 }
 
 export const IngridientItem = (props: IngridientItemProps) => {
-  const { ingridient } = props
+  const { ingridient, onOpen } = props
   const [count, setCount] = useState(0)
   return (
-    <li className={classNames(cls.container)}>
+    <li
+      className={classNames(cls.container)}
+      onClick={() => {
+        onOpen(ingridient)
+      }}
+    >
       <img
         src={ingridient.image}
         className={classNames(cls.img, {}, ['ml-4', 'mr-4'])}

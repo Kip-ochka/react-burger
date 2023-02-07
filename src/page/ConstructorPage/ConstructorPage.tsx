@@ -1,22 +1,59 @@
-import React from 'react'
+import React, { useState } from 'react'
 import { BurgerConstructor } from '../../components/BurgerConstructor/BurgerConstructor'
 import { BurgerIngredients } from '../../components/BurgerIngredients/BurgerIngredients'
+import { Modal } from '../../components/Modal/Modal'
+import ModalIngridient from '../../components/ModalIngridient/ModalIngridient'
+import { ModalOrder } from '../../components/ModalOrder/ModalOrder'
 import { Ingridient } from '../../types/ingridient'
 import { classNames } from '../../utils/helpers/classNames'
 import cls from './ConstructorPage.module.css'
 
 interface ConstructorPageProps {
-  ingredients: Ingridient[]
+  ingridients: Ingridient[]
 }
 
-export const ConstructorPage = React.memo(function ConstructorPage(
-  props: ConstructorPageProps
-) {
-  const { ingredients } = props
+export const ConstructorPage = React.memo((props: ConstructorPageProps) => {
+  const [isOpenInfo, setIsOpenInfo] = useState(false)
+  const [isOpenOrder, setIsOpenOrder] = useState(false)
+  const [infoData, setIsInfoData] = useState({})
+  const { ingridients } = props
+
+  const handleOpenInfo = (data: Ingridient) => {
+    setIsInfoData(data)
+    setIsOpenInfo(true)
+  }
+
+  const handleClose = () => {
+    setIsInfoData({})
+    setIsOpenOrder(false)
+    setIsOpenInfo(false)
+  }
+
+  const handleOpenOrder = () => {
+    setIsOpenOrder(true)
+  }
+
+  const handleCloseOrder = () => {}
   return (
     <main className={classNames(cls.page)}>
-      <BurgerIngredients ingridients={ingredients} />
-      <BurgerConstructor ingridients={ingredients} />
+      <BurgerIngredients ingridients={ingridients} onOpen={handleOpenInfo} />
+      <BurgerConstructor
+        ingridients={ingridients}
+        onOpenInfo={handleOpenInfo}
+        onOpenOrder={handleOpenOrder}
+      />
+
+      <Modal
+        isOpen={isOpenInfo}
+        onClose={handleClose}
+        children={<ModalIngridient ingridient={infoData} />}
+        title="Детали ингридиента"
+      />
+      <Modal
+        isOpen={isOpenOrder}
+        onClose={handleClose}
+        children={<ModalOrder />}
+      />
     </main>
   )
 })

@@ -10,4 +10,5 @@ export interface Ingridient {
   price: number
   proteins: number
   type: string
+  carbohydrates: number
 }
