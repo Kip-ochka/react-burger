@@ -1,0 +1,42 @@
+.section {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+
+.item {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.container {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+  max-height: 40vh;
+  overflow-y: auto;
+  overflow-x: hidden;
+  scrollbar-width: thin;
+  scrollbar-color: #8585ad #2f2f37;
+  list-style: none;
+}
+
+.container::-webkit-scrollbar {
+  height: 464px;
+  width: 8px;
+  background-color: #2f2f37;
+}
+
+.container::-webkit-scrollbar-thumb {
+  background: #8585ad;
+}
+.wrapper::-webkit-scrollbar-track {
+  background: transparent;
+  margin-bottom: 10px;
+}
+.order {
+  display: flex;
+  justify-content: flex-end;
+  align-items: center;
+}
