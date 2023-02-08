@@ -8,14 +8,18 @@ import React from 'react'
 import { Ingridient } from '../../types/ingridient'
 import { classNames } from '../../utils/helpers/classNames'
 import { bunImage } from '../../utils/variables'
+import { Modal } from '../Modal/Modal'
+import ModalIngridient from '../ModalIngridient/ModalIngridient'
 import cls from './BurgerConstructor.module.css'
 
 interface BurgerConstructorProps {
   ingridients: Ingridient[]
+  onOpenInfo: (data: Ingridient) => void
+  onOpenOrder: () => void
 }
 
 export const BurgerConstructor = (props: BurgerConstructorProps) => {
-  const { ingridients } = props
+  const { ingridients, onOpenInfo, onOpenOrder } = props
 
   const totalPrice = React.useMemo(() => {
     return ingridients.reduce((acc, item) => {
@@ -39,7 +43,13 @@ export const BurgerConstructor = (props: BurgerConstructorProps) => {
           .filter((item) => item.type !== 'bun')
           .map((item) => {
             return (
-              <div className={classNames(cls.item)}>
+              <div
+                className={classNames(cls.item)}
+                key={item._id}
+                onClick={() => {
+                  onOpenInfo(item)
+                }}
+              >
                 <DragIcon type="primary" />
                 <ConstructorElement
                   text={item.name}
@@ -65,7 +75,12 @@ export const BurgerConstructor = (props: BurgerConstructorProps) => {
           <CurrencyIcon type="primary" />
         </div>
 
-        <Button htmlType="button" type="primary" size="large">
+        <Button
+          htmlType="button"
+          type="primary"
+          size="large"
+          onClick={onOpenOrder}
+        >
           Оформить заказ
         </Button>
       </div>

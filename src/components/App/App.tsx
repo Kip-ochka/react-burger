@@ -9,7 +9,7 @@ import { AppHeader } from '../AppHeader/AppHeader'
 import cls from './App.module.css'
 
 export function App() {
-  const [ingredients, setIngredients] = useState<Ingridient[]>([])
+  const [ingridients, setIngredients] = useState<Ingridient[]>([])
   const [isLoading, setIsLoading] = useState(true)
   useEffect(() => {
     fetchIngredients(BASE_URL)
@@ -23,16 +23,20 @@ export function App() {
         setIsLoading(false)
       })
   }, [])
-  console.log(ingredients)
+
   return (
     <div className={classNames(cls.app)}>
       <AppHeader />
-      <Routes>
-        <Route
-          path="/"
-          element={<ConstructorPage ingredients={ingredients} />}
-        />
-      </Routes>
+      {isLoading ? (
+        'Loading...'
+      ) : (
+        <Routes>
+          <Route
+            path="/"
+            element={<ConstructorPage ingridients={ingridients} />}
+          />
+        </Routes>
+      )}
     </div>
   )
 }

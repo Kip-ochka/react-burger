@@ -1,0 +1,20 @@
+.wrapper {
+  width: 520px;
+  display: flex;
+
+  list-style: none;
+  margin: 32px 0 60px 0;
+  justify-content: center;
+  gap: 20px;
+}
+
+.color {
+  color: #8585ad;
+}
+
+.item {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 8px;
+}

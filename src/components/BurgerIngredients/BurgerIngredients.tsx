@@ -5,19 +5,21 @@ import { classNames } from '../../utils/helpers/classNames'
 import { createSections } from '../../utils/helpers/createSections'
 import { INGRIDIENT_TYPES, TEXT, TypografyTheme } from '../../utils/variables'
 import { IngridientItem } from '../IngridientItem/IngridientItem'
+import { Modal } from '../Modal/Modal'
+import ModalIngridient from '../ModalIngridient/ModalIngridient'
 import cls from './BurgerIngredients.module.css'
 
 interface BurgerIngredientsProps {
   ingridients: Ingridient[]
+  onOpen: (data: Ingridient) => void
 }
 
 export const BurgerIngredients = (props: BurgerIngredientsProps) => {
-  const { ingridients } = props
+  const { ingridients, onOpen } = props
   const sections = createSections(INGRIDIENT_TYPES, ingridients)
   const [current, setCurrent] = useState('Булки')
   const refs = useRef<HTMLHeadingElement[]>([])
 
-  console.log(refs.current)
   return (
     <section>
       <h1 className={classNames(TEXT, {}, [TypografyTheme.large, 'mt-10'])}>
@@ -62,7 +64,13 @@ export const BurgerIngredients = (props: BurgerIngredientsProps) => {
                 className={classNames(cls.list, {}, ['pt-6', 'mr-4', 'ml-4'])}
               >
                 {section.items.map((item) => {
-                  return <IngridientItem key={item._id} ingridient={item} />
+                  return (
+                    <IngridientItem
+                      key={item._id}
+                      ingridient={item}
+                      onOpen={onOpen}
+                    />
+                  )
                 })}
               </ul>
             </li>
