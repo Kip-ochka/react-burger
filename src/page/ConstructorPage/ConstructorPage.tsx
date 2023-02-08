@@ -20,7 +20,9 @@ export const ConstructorPage = React.memo((props: ConstructorPageProps) => {
 
   const handleOpenInfo = (data: Ingridient) => {
     setIsInfoData(data)
-    setIsOpenInfo(true)
+    setTimeout(() => {
+      setIsOpenInfo(true)
+    }, 100)
   }
 
   const handleClose = () => {
@@ -33,7 +35,6 @@ export const ConstructorPage = React.memo((props: ConstructorPageProps) => {
     setIsOpenOrder(true)
   }
 
-  const handleCloseOrder = () => {}
   return (
     <main className={classNames(cls.page)}>
       <BurgerIngredients ingridients={ingridients} onOpen={handleOpenInfo} />
