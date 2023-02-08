@@ -22,7 +22,7 @@ export const ConstructorPage = React.memo((props: ConstructorPageProps) => {
     setIsInfoData(data)
     setTimeout(() => {
       setIsOpenInfo(true)
-    }, 100)
+    }, 50)
   }
 
   const handleClose = () => {

@@ -6,7 +6,13 @@ import cls from './ModalOrder.module.css'
 export const ModalOrder = () => {
   return (
     <>
-      <p className={classNames(TEXT, {}, [TypografyTheme.digitsLarge, 'mt-4'])}>
+      <p
+        className={classNames(TEXT, {}, [
+          TypografyTheme.digitsLarge,
+          'mt-4',
+          cls.shadow,
+        ])}
+      >
         034536
       </p>
       <p className={classNames(TEXT, {}, [TypografyTheme.medium, 'mt-8'])}>
