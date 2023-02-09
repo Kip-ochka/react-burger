@@ -1,12 +1,10 @@
 import { Tab } from '@ya.praktikum/react-developer-burger-ui-components'
-import { useRef, useState } from 'react'
+import { useMemo, useRef, useState } from 'react'
 import { Ingridient } from '../../types/ingridient'
 import { classNames } from '../../utils/helpers/classNames'
 import { createSections } from '../../utils/helpers/createSections'
 import { INGRIDIENT_TYPES, TEXT, TypografyTheme } from '../../utils/variables'
 import { IngridientItem } from '../IngridientItem/IngridientItem'
-import { Modal } from '../Modal/Modal'
-import ModalIngridient from '../ModalIngridient/ModalIngridient'
 import cls from './BurgerIngredients.module.css'
 
 interface BurgerIngredientsProps {
@@ -16,7 +14,10 @@ interface BurgerIngredientsProps {
 
 export const BurgerIngredients = (props: BurgerIngredientsProps) => {
   const { ingridients, onOpen } = props
-  const sections = createSections(INGRIDIENT_TYPES, ingridients)
+  const sections = useMemo(
+    () => createSections(INGRIDIENT_TYPES, ingridients),
+    [ingridients]
+  )
   const [current, setCurrent] = useState('Булки')
   const refs = useRef<HTMLHeadingElement[]>([])
 
