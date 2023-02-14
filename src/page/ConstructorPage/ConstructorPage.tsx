@@ -1,4 +1,6 @@
 import React, { useState } from 'react'
+import { DndProvider } from 'react-dnd'
+import { HTML5Backend } from 'react-dnd-html5-backend'
 import { BurgerConstructor } from '../../components/BurgerConstructor/BurgerConstructor'
 import { BurgerIngredients } from '../../components/BurgerIngredients/BurgerIngredients'
 import { Modal } from '../../components/Modal/Modal'
@@ -8,15 +10,12 @@ import { Ingridient } from '../../types/ingridient'
 import { classNames } from '../../utils/helpers/classNames'
 import cls from './ConstructorPage.module.css'
 
-interface ConstructorPageProps {
-  ingridients: Ingridient[]
-}
+interface ConstructorPageProps {}
 
 export const ConstructorPage = React.memo((props: ConstructorPageProps) => {
   const [isOpenInfo, setIsOpenInfo] = useState(false)
   const [isOpenOrder, setIsOpenOrder] = useState(false)
   const [infoData, setIsInfoData] = useState({})
-  const { ingridients } = props
 
   const handleOpenInfo = (data: Ingridient) => {
     setIsInfoData(data)
@@ -37,12 +36,10 @@ export const ConstructorPage = React.memo((props: ConstructorPageProps) => {
 
   return (
     <main className={classNames(cls.page)}>
-      <BurgerIngredients ingridients={ingridients} onOpen={handleOpenInfo} />
-      <BurgerConstructor
-        ingridients={ingridients}
-        onOpenInfo={handleOpenInfo}
-        onOpenOrder={handleOpenOrder}
-      />
+      <DndProvider backend={HTML5Backend}>
+        <BurgerIngredients onOpen={handleOpenInfo} />
+        <BurgerConstructor onOpenOrder={handleOpenOrder} />
+      </DndProvider>
 
       <Modal
         isOpen={isOpenInfo}

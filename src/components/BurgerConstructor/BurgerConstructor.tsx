@@ -4,70 +4,54 @@ import {
   CurrencyIcon,
   DragIcon,
 } from '@ya.praktikum/react-developer-burger-ui-components'
-import React from 'react'
+import { useMemo } from 'react'
+import { useDrop } from 'react-dnd'
+import { addIngridient } from '../../store/ingridientsSlice'
 import { Ingridient } from '../../types/ingridient'
 import { classNames } from '../../utils/helpers/classNames'
-import { bunImage } from '../../utils/variables'
-import { Modal } from '../Modal/Modal'
-import ModalIngridient from '../ModalIngridient/ModalIngridient'
+import {
+  useAppDispatch,
+  useAppSelector,
+} from '../../utils/hooks/reduxTypedHooks'
 import cls from './BurgerConstructor.module.css'
 
 interface BurgerConstructorProps {
-  ingridients: Ingridient[]
-  onOpenInfo: (data: Ingridient) => void
   onOpenOrder: () => void
 }
 
 export const BurgerConstructor = (props: BurgerConstructorProps) => {
-  const { ingridients, onOpenInfo, onOpenOrder } = props
+  const { onOpenOrder } = props
+  const dispatch = useAppDispatch()
+  const { inConstructor } = useAppSelector((state) => state.ingridients)
+  const [_, dropTarget] = useDrop({
+    accept: 'ingridient',
+    drop(item) {
+      dispatch(addIngridient(item))
+    },
+  })
 
-  const totalPrice = React.useMemo(() => {
-    return ingridients.reduce((acc, item) => {
-      return acc + item.price
-    }, 0)
-  }, [ingridients])
+  const totalPrice = useMemo(() => {
+    if (inConstructor.length === 0) {
+      return 0
+    } else {
+      return (inConstructor as Ingridient[]).reduce(
+        (acc: number, item: Ingridient) => {
+          return acc + item.price
+        },
+        0
+      )
+    }
+  }, [inConstructor])
 
   return (
     <section className={classNames(cls.section, {}, ['mt-25'])}>
-      <div className={classNames('', {}, ['ml-8'])}>
-        <ConstructorElement
-          type="top"
-          isLocked={true}
-          text="Краторная булка N-200i (верх)"
-          price={200}
-          thumbnail={bunImage}
-        />
-      </div>
-      <div className={classNames(cls.container)}>
-        {ingridients
-          .filter((item) => item.type !== 'bun')
-          .map((item) => {
-            return (
-              <div
-                className={classNames(cls.item)}
-                key={item._id}
-                onClick={() => {
-                  onOpenInfo(item)
-                }}
-              >
-                <DragIcon type="primary" />
-                <ConstructorElement
-                  text={item.name}
-                  price={item.price}
-                  thumbnail={item.image}
-                />
-              </div>
-            )
-          })}
-      </div>
-      <div className={classNames('', {}, ['ml-8'])}>
-        <ConstructorElement
-          type="bottom"
-          isLocked={true}
-          text="Краторная булка N-200i (верх)"
-          price={200}
-          thumbnail={bunImage}
-        />
+      <div
+        ref={dropTarget}
+        className={classNames(cls.constructorWrapper, {}, [])}
+      >
+        {inConstructor.map((item) => {
+          return <div>хай</div>
+        })}
       </div>
       <div className={classNames(cls.order, {}, ['mt-10', 'mr-8'])}>
         <p className="text text_type_digits-medium">{totalPrice}</p>

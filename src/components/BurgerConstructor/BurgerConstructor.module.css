@@ -1,9 +1,17 @@
 .section {
   display: flex;
   flex-direction: column;
-  gap: 16px;
+  justify-content: space-between;
+  height: 700px;
 }
-
+.constructorWrapper {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+  height: 100%;
+  border-radius: 40px;
+  border: 1px wheat solid;
+}
 .item {
   display: flex;
   align-items: center;
