@@ -20,7 +20,7 @@ export const IngridientItem = (props: IngridientItemProps) => {
 
   const { inConstructor } = useAppSelector((state) => state.ingridients)
   const [_, dragRef] = useDrag({
-    type: 'ingridient',
+    type: ingridient.type,
     item: { ingridient },
   })
   const count = useMemo(() => {

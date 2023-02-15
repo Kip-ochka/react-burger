@@ -2,7 +2,6 @@ import {
   Button,
   ConstructorElement,
   CurrencyIcon,
-  DragIcon,
 } from '@ya.praktikum/react-developer-burger-ui-components'
 import { useMemo } from 'react'
 import { useDrop } from 'react-dnd'
@@ -14,6 +13,7 @@ import {
   useAppSelector,
 } from '../../utils/hooks/reduxTypedHooks'
 import cls from './BurgerConstructor.module.css'
+import ConstructorItem from '../ConstructorItem/ConstructorItem'
 
 interface BurgerConstructorProps {
   onOpenOrder: () => void
@@ -24,8 +24,14 @@ export const BurgerConstructor = (props: BurgerConstructorProps) => {
   const dispatch = useAppDispatch()
   const { inConstructor } = useAppSelector((state) => state.ingridients)
   const [_, dropTarget] = useDrop({
-    accept: 'ingridient',
-    drop(item) {
+    accept: 'bun',
+    drop(item: { ingridient: Ingridient }) {
+      dispatch(addIngridient(item))
+    },
+  })
+  const [, dropTargetInner] = useDrop({
+    accept: ['main', 'sauce'],
+    drop(item: { ingridient: Ingridient }) {
       dispatch(addIngridient(item))
     },
   })
@@ -36,6 +42,9 @@ export const BurgerConstructor = (props: BurgerConstructorProps) => {
     } else {
       return (inConstructor as Ingridient[]).reduce(
         (acc: number, item: Ingridient) => {
+          if (item.type === 'bun') {
+            return acc + item.price * 2
+          }
           return acc + item.price
         },
         0
@@ -49,8 +58,43 @@ export const BurgerConstructor = (props: BurgerConstructorProps) => {
         ref={dropTarget}
         className={classNames(cls.constructorWrapper, {}, [])}
       >
-        {inConstructor.map((item) => {
-          return <div>хай</div>
+        {inConstructor.map((item, index) => {
+          if (item.type === 'bun') {
+            return (
+              <div key={index}>
+                <ConstructorElement
+                  text={item.name}
+                  price={item.price}
+                  type="top"
+                  isLocked={true}
+                  thumbnail={item.image}
+                  extraClass={classNames(cls.item, {}, ['ml-8', 'mb-4'])}
+                />
+                <div ref={dropTargetInner} className={cls.container}>
+                  {inConstructor.map((item, index) => {
+                    if (item.type !== 'bun') {
+                      return (
+                        <ConstructorItem
+                          key={index}
+                          extraClass={cls.item}
+                          ingridient={item}
+                          subId={index}
+                        />
+                      )
+                    }
+                  })}
+                </div>
+                <ConstructorElement
+                  text={item.name}
+                  price={item.price}
+                  type="bottom"
+                  isLocked={true}
+                  thumbnail={item.image}
+                  extraClass={classNames(cls.item, {}, ['ml-8', 'mt-4'])}
+                />
+              </div>
+            )
+          }
         })}
       </div>
       <div className={classNames(cls.order, {}, ['mt-10', 'mr-8'])}>

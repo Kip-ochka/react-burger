@@ -8,8 +8,8 @@ export interface IngridientsData {
 export interface IngridientSlice {
   loading: boolean
   error: string | null | undefined
-  ingridientList: Ingridient[] | []
-  inConstructor: Ingridient[] | []
-  ingridientData: IngridientsData
-  order: { ingridients: Ingridient[] } | { ingridients: [] }
+  ingridientList: Array<Ingridient>
+  inConstructor: Array<Ingridient>
+  ingridientData: IngridientsData | {}
+  order: { ingridients: Array<Ingridient> }
 }

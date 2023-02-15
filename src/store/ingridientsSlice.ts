@@ -1,5 +1,6 @@
 import { createAsyncThunk, createSlice } from '@reduxjs/toolkit'
 import { IngridientsData, IngridientSlice } from '../types/ingidientSlice'
+import { Ingridient } from '../types/ingridient'
 import { BASE_URL } from '../utils/variables'
 
 export const fetchGetIngridients = createAsyncThunk<
@@ -30,7 +31,18 @@ const ingridients = createSlice({
   } as IngridientSlice,
   reducers: {
     addIngridient: (state, action) => {
-      state.inConstructor = [...state.inConstructor, action.payload]
+      console.log(action.payload)
+      const { ingridient } = action.payload
+      if (ingridient.type === 'bun') {
+        state.inConstructor = [ingridient, ...state.inConstructor.slice(1)]
+        return
+      }
+      state.inConstructor = [...state.inConstructor, ingridient]
+    },
+    removeIngridient: (state, action) => {
+      state.inConstructor = state.inConstructor.filter((item, index) => {
+        return index !== action.payload
+      })
     },
   },
   extraReducers: (builder) => {
@@ -49,5 +61,5 @@ const ingridients = createSlice({
       })
   },
 })
-export const { addIngridient } = ingridients.actions
+export const { addIngridient, removeIngridient } = ingridients.actions
 export default ingridients.reducer
