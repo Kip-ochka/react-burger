@@ -19,10 +19,12 @@ export const IngridientItem = (props: IngridientItemProps) => {
   const { ingridient, onOpen } = props
 
   const { inConstructor } = useAppSelector((state) => state.ingridients)
+
   const [_, dragRef] = useDrag({
     type: ingridient.type,
     item: { ingridient },
   })
+
   const count = useMemo(() => {
     return inConstructor.filter((item) => {
       return item._id === ingridient._id

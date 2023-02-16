@@ -31,7 +31,6 @@ const ingridients = createSlice({
   } as IngridientSlice,
   reducers: {
     addIngridient: (state, action) => {
-      console.log(action.payload)
       const { ingridient } = action.payload
       if (ingridient.type === 'bun') {
         state.inConstructor = [ingridient, ...state.inConstructor.slice(1)]
@@ -43,6 +42,18 @@ const ingridients = createSlice({
       state.inConstructor = state.inConstructor.filter((item, index) => {
         return index !== action.payload
       })
+    },
+    moveIngridient: (state, action) => {
+      const { item, subId } = action.payload
+      const dragIndex = item.subId
+      const hoverIndex = subId
+      if (item.subId === subId) return
+      state.inConstructor.splice(
+        dragIndex,
+        0,
+        state.inConstructor.splice(hoverIndex, 1)[0]
+      )
+      item.subId = hoverIndex
     },
   },
   extraReducers: (builder) => {
@@ -61,5 +72,6 @@ const ingridients = createSlice({
       })
   },
 })
-export const { addIngridient, removeIngridient } = ingridients.actions
+export const { addIngridient, removeIngridient, moveIngridient } =
+  ingridients.actions
 export default ingridients.reducer

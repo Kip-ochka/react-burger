@@ -1,11 +1,10 @@
 import {
   Button,
-  ConstructorElement,
   CurrencyIcon,
 } from '@ya.praktikum/react-developer-burger-ui-components'
-import { useMemo } from 'react'
+import { useMemo, useState } from 'react'
 import { useDrop } from 'react-dnd'
-import { addIngridient } from '../../store/ingridientsSlice'
+import { addIngridient, removeIngridient } from '../../store/ingridientsSlice'
 import { Ingridient } from '../../types/ingridient'
 import { classNames } from '../../utils/helpers/classNames'
 import {
@@ -14,6 +13,9 @@ import {
 } from '../../utils/hooks/reduxTypedHooks'
 import cls from './BurgerConstructor.module.css'
 import ConstructorItem from '../ConstructorItem/ConstructorItem'
+import { TEXT, TypografyTheme } from '../../utils/variables'
+import BunContainer from '../BunContainer/BunContainer'
+import React from 'react'
 
 interface BurgerConstructorProps {
   onOpenOrder: () => void
@@ -21,19 +23,18 @@ interface BurgerConstructorProps {
 
 export const BurgerConstructor = (props: BurgerConstructorProps) => {
   const { onOpenOrder } = props
-  const dispatch = useAppDispatch()
   const { inConstructor } = useAppSelector((state) => state.ingridients)
-  const [_, dropTarget] = useDrop({
+  const dispatch = useAppDispatch()
+  const [isPlaceholder, setIsPlaceholder] = useState(inConstructor.length === 0)
+
+  const [{ isHover }, dropTarget] = useDrop({
     accept: 'bun',
-    drop(item: { ingridient: Ingridient }) {
+    drop(item) {
       dispatch(addIngridient(item))
     },
-  })
-  const [, dropTargetInner] = useDrop({
-    accept: ['main', 'sauce'],
-    drop(item: { ingridient: Ingridient }) {
-      dispatch(addIngridient(item))
-    },
+    collect: (monitor) => ({
+      isHover: monitor.isOver(),
+    }),
   })
 
   const totalPrice = useMemo(() => {
@@ -56,21 +57,26 @@ export const BurgerConstructor = (props: BurgerConstructorProps) => {
     <section className={classNames(cls.section, {}, ['mt-25'])}>
       <div
         ref={dropTarget}
-        className={classNames(cls.constructorWrapper, {}, [])}
+        className={classNames(
+          cls.constructorWrapper,
+          { [cls.empty]: isPlaceholder, [cls.targethover]: isHover },
+          []
+        )}
       >
-        {inConstructor.map((item, index) => {
-          if (item.type === 'bun') {
-            return (
-              <div key={index}>
-                <ConstructorElement
-                  text={item.name}
-                  price={item.price}
-                  type="top"
-                  isLocked={true}
-                  thumbnail={item.image}
-                  extraClass={classNames(cls.item, {}, ['ml-8', 'mb-4'])}
-                />
-                <div ref={dropTargetInner} className={cls.container}>
+        {inConstructor.length === 0 ? (
+          <p
+            className={classNames(TEXT, {}, [
+              TypografyTheme.large,
+              cls.placeholder,
+            ])}
+          >
+            Перетащи сюда булочку
+          </p>
+        ) : (
+          inConstructor.map((item, index) => {
+            if (item.type === 'bun') {
+              return (
+                <BunContainer item={item} key={index}>
                   {inConstructor.map((item, index) => {
                     if (item.type !== 'bun') {
                       return (
@@ -83,19 +89,11 @@ export const BurgerConstructor = (props: BurgerConstructorProps) => {
                       )
                     }
                   })}
-                </div>
-                <ConstructorElement
-                  text={item.name}
-                  price={item.price}
-                  type="bottom"
-                  isLocked={true}
-                  thumbnail={item.image}
-                  extraClass={classNames(cls.item, {}, ['ml-8', 'mt-4'])}
-                />
-              </div>
-            )
-          }
-        })}
+                </BunContainer>
+              )
+            }
+          })
+        )}
       </div>
       <div className={classNames(cls.order, {}, ['mt-10', 'mr-8'])}>
         <p className="text text_type_digits-medium">{totalPrice}</p>
