@@ -11,5 +11,19 @@ export interface IngridientSlice {
   ingridientList: Array<Ingridient>
   inConstructor: Array<Ingridient>
   ingridientData: IngridientsData | {}
-  order: { ingridients: Array<Ingridient> }
+  order: IncomingOrder
+  orderError: string | null | undefined
+  orderLoading: boolean
+}
+
+export interface OutcomingOrder {
+  ingredients: string[]
+}
+
+export interface IncomingOrder {
+  name: string
+  order: {
+    number: number
+  }
+  sucess: boolean
 }

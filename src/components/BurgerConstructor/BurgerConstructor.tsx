@@ -2,9 +2,14 @@ import {
   Button,
   CurrencyIcon,
 } from '@ya.praktikum/react-developer-burger-ui-components'
-import { useMemo, useState } from 'react'
+import { useCallback, useMemo, useState } from 'react'
 import { useDrop } from 'react-dnd'
-import { addIngridient, removeIngridient } from '../../store/ingridientsSlice'
+import {
+  addIngridient,
+  cleanError,
+  fetchPostOrder,
+  removeIngridient,
+} from '../../store/ingridientsSlice'
 import { Ingridient } from '../../types/ingridient'
 import { classNames } from '../../utils/helpers/classNames'
 import {
@@ -16,6 +21,7 @@ import ConstructorItem from '../ConstructorItem/ConstructorItem'
 import { TEXT, TypografyTheme } from '../../utils/variables'
 import BunContainer from '../BunContainer/BunContainer'
 import React from 'react'
+import Preloader from '../Preloader/Preloader'
 
 interface BurgerConstructorProps {
   onOpenOrder: () => void
@@ -23,7 +29,9 @@ interface BurgerConstructorProps {
 
 export const BurgerConstructor = (props: BurgerConstructorProps) => {
   const { onOpenOrder } = props
-  const { inConstructor } = useAppSelector((state) => state.ingridients)
+  const { inConstructor, orderError, orderLoading } = useAppSelector(
+    (state) => state.ingridients
+  )
   const dispatch = useAppDispatch()
   const [isPlaceholder, setIsPlaceholder] = useState(inConstructor.length === 0)
 
@@ -53,6 +61,17 @@ export const BurgerConstructor = (props: BurgerConstructorProps) => {
     }
   }, [inConstructor])
 
+  const makeOrderHandler = () => {
+    const data = inConstructor.map((item) => item._id)
+    dispatch(fetchPostOrder({ ingredients: data })).then((order) => {
+      const { success } = order.payload
+      if (success) {
+        onOpenOrder()
+        dispatch(cleanError())
+      }
+    })
+  }
+
   return (
     <section className={classNames(cls.section, {}, ['mt-25'])}>
       <div
@@ -63,7 +82,9 @@ export const BurgerConstructor = (props: BurgerConstructorProps) => {
           []
         )}
       >
-        {inConstructor.length === 0 ? (
+        {orderLoading ? (
+          <Preloader />
+        ) : inConstructor.length === 0 ? (
           <p
             className={classNames(TEXT, {}, [
               TypografyTheme.large,
@@ -95,17 +116,23 @@ export const BurgerConstructor = (props: BurgerConstructorProps) => {
           })
         )}
       </div>
+      {orderError && inConstructor.length === 0 ? (
+        <p className={classNames(TEXT, {}, [TypografyTheme.small, cls.error])}>
+          {orderError}
+        </p>
+      ) : null}
       <div className={classNames(cls.order, {}, ['mt-10', 'mr-8'])}>
         <p className="text text_type_digits-medium">{totalPrice}</p>
         <div className={classNames(cls.icon, {}, ['ml-2', 'mr-10'])}>
           <CurrencyIcon type="primary" />
         </div>
-
         <Button
           htmlType="button"
           type="primary"
           size="large"
-          onClick={onOpenOrder}
+          onClick={() => {
+            makeOrderHandler()
+          }}
         >
           Оформить заказ
         </Button>

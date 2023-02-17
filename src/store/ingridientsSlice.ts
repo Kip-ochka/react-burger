@@ -1,5 +1,10 @@
 import { createAsyncThunk, createSlice } from '@reduxjs/toolkit'
-import { IngridientsData, IngridientSlice } from '../types/ingidientSlice'
+import {
+  IncomingOrder,
+  IngridientsData,
+  IngridientSlice,
+  OutcomingOrder,
+} from '../types/ingidientSlice'
 import { Ingridient } from '../types/ingridient'
 import { BASE_URL } from '../utils/variables'
 
@@ -8,7 +13,7 @@ export const fetchGetIngridients = createAsyncThunk<
   undefined,
   { rejectValue: string }
 >('ingridients/getIngridients', async (_, { rejectWithValue }) => {
-  const response = await fetch(BASE_URL, {
+  const response = await fetch(`${BASE_URL}/ingredients`, {
     method: 'GET',
   })
   if (response.ok) {
@@ -19,15 +24,36 @@ export const fetchGetIngridients = createAsyncThunk<
   }
 })
 
+export const fetchPostOrder = createAsyncThunk(
+  'ingridients/postOrder',
+  async (orderData: OutcomingOrder, { rejectWithValue }) => {
+    const response = await fetch(`${BASE_URL}/orders`, {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify(orderData),
+    })
+    if (response.ok) {
+      const data = await response.json()
+      return data
+    } else {
+      return rejectWithValue(`${response.statusText}`)
+    }
+  }
+)
+
 const ingridients = createSlice({
   name: 'ingridients',
   initialState: {
     loading: false,
+    orderLoading: false,
     error: null,
+    orderError: null,
     ingridientList: [],
     inConstructor: [],
     ingridientData: {},
-    order: { ingridients: [] },
+    order: {} as IncomingOrder,
   } as IngridientSlice,
   reducers: {
     addIngridient: (state, action) => {
@@ -42,6 +68,9 @@ const ingridients = createSlice({
       state.inConstructor = state.inConstructor.filter((item, index) => {
         return index !== action.payload
       })
+    },
+    cleanError: (state) => {
+      state.orderError = null
     },
     moveIngridient: (state, action) => {
       const { item, subId } = action.payload
@@ -70,8 +99,25 @@ const ingridients = createSlice({
         state.loading = false
         state.error = action.payload
       })
+      .addCase(fetchPostOrder.pending, (state) => {
+        state.orderLoading = true
+      })
+      .addCase(fetchPostOrder.fulfilled, (state, action) => {
+        state.orderLoading = false
+        state.order = action.payload
+        state.inConstructor = []
+        state.loading = false
+      })
+      .addCase(fetchPostOrder.rejected, (state, action) => {
+        state.orderLoading = false
+        if (state.inConstructor.length === 0) {
+          state.orderError = `Заказ пустой, добавьте ингридиенты, что бы мы начали готовить.`
+          return
+        }
+        state.orderError = `Заказ не был создан, по причине: ${action.payload}`
+      })
   },
 })
-export const { addIngridient, removeIngridient, moveIngridient } =
+export const { addIngridient, removeIngridient, moveIngridient, cleanError } =
   ingridients.actions
 export default ingridients.reducer

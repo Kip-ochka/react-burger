@@ -18,14 +18,11 @@ function ConstructorItem(props: ConstructorItemProps) {
   const { extraClass, ingridient, subId } = props
   const dispatch = useAppDispatch()
 
-  const [{ isHover }, dropElement] = useDrop({
+  const [, dropElement] = useDrop({
     accept: 'element',
     hover(item, monitor) {
       dispatch(moveIngridient({ item, subId }))
     },
-    collect: (monitor) => ({
-      isHover: monitor.isOver(),
-    }),
   })
 
   const [, dragRef] = useDrag({
