@@ -1,4 +1,3 @@
-import React from 'react'
 import { classNames } from '../../utils/helpers/classNames'
 import { TEXT, TypografyTheme } from '../../utils/variables'
 import { ReactComponent as Done } from '../../images/icons/graphics.svg'

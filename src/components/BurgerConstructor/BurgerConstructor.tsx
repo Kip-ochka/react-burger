@@ -8,7 +8,6 @@ import {
   addIngridient,
   cleanError,
   fetchPostOrder,
-  removeIngridient,
 } from '../../store/ingridientsSlice'
 import { Ingridient } from '../../types/ingridient'
 import { classNames } from '../../utils/helpers/classNames'
@@ -20,7 +19,6 @@ import cls from './BurgerConstructor.module.css'
 import ConstructorItem from '../ConstructorItem/ConstructorItem'
 import { TEXT, TypografyTheme } from '../../utils/variables'
 import BunContainer from '../BunContainer/BunContainer'
-import React from 'react'
 import Preloader from '../Preloader/Preloader'
 
 interface BurgerConstructorProps {
@@ -61,8 +59,8 @@ export const BurgerConstructor = (props: BurgerConstructorProps) => {
     }
   }, [inConstructor])
 
-  const makeOrderHandler = () => {
-    const data = inConstructor.map((item) => item._id)
+  const makeOrderHandler = useCallback((inOrderArray: Ingridient[]) => {
+    const data = inOrderArray.map((item) => item._id)
     dispatch(fetchPostOrder({ ingredients: data })).then((order) => {
       const { success } = order.payload
       if (success) {
@@ -70,7 +68,7 @@ export const BurgerConstructor = (props: BurgerConstructorProps) => {
         dispatch(cleanError())
       }
     })
-  }
+  }, [])
 
   return (
     <section className={classNames(cls.section, {}, ['mt-25'])}>
@@ -131,7 +129,7 @@ export const BurgerConstructor = (props: BurgerConstructorProps) => {
           type="primary"
           size="large"
           onClick={() => {
-            makeOrderHandler()
+            makeOrderHandler(inConstructor)
           }}
         >
           Оформить заказ

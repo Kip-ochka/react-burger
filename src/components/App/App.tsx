@@ -1,4 +1,4 @@
-import { useEffect, useState } from 'react'
+import { useEffect } from 'react'
 import { Route, Routes } from 'react-router-dom'
 import { ConstructorPage } from '../../page/ConstructorPage/ConstructorPage'
 import { classNames } from '../../utils/helpers/classNames'
@@ -15,7 +15,7 @@ export function App() {
   const { loading } = useAppSelector((state) => state.ingridients)
   useEffect(() => {
     dispatch(fetchGetIngridients())
-  }, [])
+  }, [dispatch])
 
   return (
     <div className={classNames(cls.app)}>

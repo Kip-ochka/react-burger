@@ -1,4 +1,3 @@
-import React from 'react'
 import { Ingridient } from '../../types/ingridient'
 import { classNames } from '../../utils/helpers/classNames'
 import { TEXT, TypografyTheme } from '../../utils/variables'
@@ -15,7 +14,7 @@ function ModalIngridient(props: ModalIngridientProps) {
     ingridient as Ingridient
   return (
     <>
-      <img src={image_large} />
+      <img src={image_large} alt={`${name}`} />
       <p className={classNames(TEXT, {}, [TypografyTheme.medium, 'mt-4'])}>
         {name}
       </p>

@@ -12,6 +12,10 @@ interface BurgerIngredientsProps {
   onOpen: (data: Ingridient) => void
 }
 
+interface Headers {
+  [key: string]: boolean
+}
+
 export const BurgerIngredients = (props: BurgerIngredientsProps) => {
   const { onOpen } = props
   const { ingridientList, error } = useAppSelector((state) => state.ingridients)
@@ -20,7 +24,33 @@ export const BurgerIngredients = (props: BurgerIngredientsProps) => {
     [ingridientList]
   )
   const [current, setCurrent] = useState('Булки')
-  const refs = useRef<HTMLHeadingElement[]>([])
+  const rootRef = useRef<HTMLUListElement | null>(null)
+  const refs = useRef<HTMLElement[]>([])
+
+  useEffect(() => {
+    let headers = {} as Headers
+    const observer = new IntersectionObserver(
+      (entrys) => {
+        for (const entry of entrys) {
+          headers[entry.target.textContent!] = entry.isIntersecting
+        }
+        console.log(headers)
+        for (const header in headers) {
+          if (headers[header]) {
+            setCurrent(header)
+            break
+          }
+        }
+      },
+      { root: rootRef.current, rootMargin: '0px 0px 0px 0px', threshold: 1 }
+    )
+
+    refs.current.forEach((el) => {
+      observer.observe(el)
+    })
+
+    return () => observer.disconnect()
+  }, [refs, sections])
 
   return (
     <section>
@@ -53,7 +83,7 @@ export const BurgerIngredients = (props: BurgerIngredientsProps) => {
               )
             })}
           </div>
-          <ul className={classNames(cls.container)}>
+          <ul className={classNames(cls.container)} ref={rootRef}>
             {sections.map((section, index) => {
               return (
                 <li

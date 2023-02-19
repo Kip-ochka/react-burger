@@ -5,7 +5,6 @@ import {
   IngridientSlice,
   OutcomingOrder,
 } from '../types/ingidientSlice'
-import { Ingridient } from '../types/ingridient'
 import { BASE_URL } from '../utils/variables'
 
 export const fetchGetIngridients = createAsyncThunk<

@@ -1,5 +1,5 @@
 import { ConstructorElement } from '@ya.praktikum/react-developer-burger-ui-components'
-import { ReactNode, useCallback } from 'react'
+import { ReactNode } from 'react'
 import { useDrop } from 'react-dnd'
 import { addIngridient } from '../../store/ingridientsSlice'
 import { Ingridient } from '../../types/ingridient'
