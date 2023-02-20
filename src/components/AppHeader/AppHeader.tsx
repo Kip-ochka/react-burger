@@ -4,13 +4,13 @@ import {
   Logo,
   ProfileIcon,
 } from '@ya.praktikum/react-developer-burger-ui-components'
-import React from 'react'
+import React, { FC } from 'react'
 import { NavLink } from 'react-router-dom'
 import { classNames } from '../../utils/helpers/classNames'
 import { INACTIVE_COLOR, TEXT, TypografyTheme } from '../../utils/variables'
 import cls from './AppHeader.module.css'
 
-export const AppHeader = React.memo(() => {
+export const AppHeader: FC = React.memo(() => {
   return (
     <header className={classNames(cls.header, {}, ['pt-4', 'pb-4'])}>
       <nav className={classNames(cls.nav)}>

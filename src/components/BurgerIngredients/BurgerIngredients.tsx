@@ -1,5 +1,5 @@
 import { Tab } from '@ya.praktikum/react-developer-burger-ui-components'
-import { useEffect, useMemo, useRef, useState } from 'react'
+import { FC, useEffect, useMemo, useRef, useState } from 'react'
 import { Ingridient } from '../../types/ingridient'
 import { classNames } from '../../utils/helpers/classNames'
 import { createSections } from '../../utils/helpers/createSections'
@@ -16,7 +16,7 @@ interface Headers {
   [key: string]: boolean
 }
 
-export const BurgerIngredients = (props: BurgerIngredientsProps) => {
+export const BurgerIngredients: FC<BurgerIngredientsProps> = (props) => {
   const { onOpen } = props
   const { ingridientList, error } = useAppSelector((state) => state.ingridients)
   const sections = useMemo(

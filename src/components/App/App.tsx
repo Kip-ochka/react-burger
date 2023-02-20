@@ -1,4 +1,4 @@
-import { useEffect } from 'react'
+import { FC, useEffect } from 'react'
 import { Route, Routes } from 'react-router-dom'
 import { ConstructorPage } from '../../page/ConstructorPage/ConstructorPage'
 import { classNames } from '../../utils/helpers/classNames'
@@ -10,7 +10,7 @@ import {
 } from '../../utils/hooks/reduxTypedHooks'
 import { fetchGetIngridients } from '../../store/ingridientsSlice'
 
-export function App() {
+export const App: FC = () => {
   const dispatch = useAppDispatch()
   const { loading } = useAppSelector((state) => state.ingridients)
   useEffect(() => {

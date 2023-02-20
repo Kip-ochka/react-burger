@@ -2,7 +2,7 @@ import {
   Counter,
   CurrencyIcon,
 } from '@ya.praktikum/react-developer-burger-ui-components'
-import { useMemo } from 'react'
+import { FC, useMemo } from 'react'
 import { useDrag } from 'react-dnd'
 import { Ingridient } from '../../types/ingridient'
 import { classNames } from '../../utils/helpers/classNames'
@@ -15,7 +15,7 @@ interface IngridientItemProps {
   onOpen: (data: Ingridient) => void
 }
 
-export const IngridientItem = (props: IngridientItemProps) => {
+export const IngridientItem: FC<IngridientItemProps> = (props) => {
   const { ingridient, onOpen } = props
 
   const { inConstructor } = useAppSelector((state) => state.ingridients)

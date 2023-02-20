@@ -1,10 +1,10 @@
-import React, { useEffect } from 'react'
+import React, { FC, useEffect } from 'react'
 import cls from './Modal.module.css'
 import { classNames } from '../../utils/helpers/classNames'
 import { CloseIcon } from '@ya.praktikum/react-developer-burger-ui-components'
 import ReactDOM from 'react-dom'
 import { TEXT, TypografyTheme } from '../../utils/variables'
-import ModalOverlay from '../ModalOverlay/ModalOverlay'
+import { ModalOverlay } from '../ModalOverlay/ModalOverlay'
 
 const reactModals = document.getElementById('react-modals') as HTMLElement
 
@@ -15,7 +15,7 @@ interface ModalProps {
   onClose: () => void
 }
 
-export const Modal = (props: ModalProps) => {
+export const Modal: FC<ModalProps> = (props) => {
   const { children, title, isOpen, onClose } = props
 
   useEffect(() => {

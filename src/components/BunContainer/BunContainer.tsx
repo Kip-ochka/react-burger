@@ -1,5 +1,5 @@
 import { ConstructorElement } from '@ya.praktikum/react-developer-burger-ui-components'
-import { ReactNode } from 'react'
+import { FC, ReactNode } from 'react'
 import { useDrop } from 'react-dnd'
 import { addIngridient } from '../../store/ingridientsSlice'
 import { Ingridient } from '../../types/ingridient'
@@ -12,7 +12,7 @@ interface BunContainerProps {
   children: ReactNode
 }
 
-function BunContainer(props: BunContainerProps) {
+export const BunContainer: FC<BunContainerProps> = (props) => {
   const { item, children } = props
   const dispatch = useAppDispatch()
 
@@ -57,5 +57,3 @@ function BunContainer(props: BunContainerProps) {
     </div>
   )
 }
-
-export default BunContainer

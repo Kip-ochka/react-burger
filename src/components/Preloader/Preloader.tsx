@@ -1,5 +1,6 @@
+import { FC } from 'react'
 import './Preloader.css'
-function Preloader() {
+export const Preloader: FC = () => {
   return (
     <div className="lds-ring">
       <div></div>

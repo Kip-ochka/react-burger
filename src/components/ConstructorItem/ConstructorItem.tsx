@@ -2,6 +2,7 @@ import {
   ConstructorElement,
   DragIcon,
 } from '@ya.praktikum/react-developer-burger-ui-components'
+import { FC } from 'react'
 import { useDrag, useDrop } from 'react-dnd'
 import { moveIngridient, removeIngridient } from '../../store/ingridientsSlice'
 import { Ingridient } from '../../types/ingridient'
@@ -14,7 +15,9 @@ interface ConstructorItemProps {
   subId: number
 }
 
-function ConstructorItem(props: ConstructorItemProps) {
+export const ConstructorItem: FC<ConstructorItemProps> = (
+  props: ConstructorItemProps
+) => {
   const { extraClass, ingridient, subId } = props
   const dispatch = useAppDispatch()
 
@@ -51,5 +54,3 @@ function ConstructorItem(props: ConstructorItemProps) {
     </div>
   )
 }
-
-export default ConstructorItem

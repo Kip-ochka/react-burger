@@ -1,3 +1,4 @@
+import { FC } from 'react'
 import { Ingridient } from '../../types/ingridient'
 import { classNames } from '../../utils/helpers/classNames'
 import { TEXT, TypografyTheme } from '../../utils/variables'
@@ -7,7 +8,7 @@ interface ModalIngridientProps {
   ingridient: Ingridient | {}
 }
 
-function ModalIngridient(props: ModalIngridientProps) {
+export const ModalIngridient: FC<ModalIngridientProps> = (props) => {
   const { ingridient } = props
 
   const { image_large, name, calories, proteins, fat, carbohydrates } =
@@ -95,5 +96,3 @@ function ModalIngridient(props: ModalIngridientProps) {
     </>
   )
 }
-
-export default ModalIngridient

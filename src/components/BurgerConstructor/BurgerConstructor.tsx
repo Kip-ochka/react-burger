@@ -16,9 +16,9 @@ import {
   useAppSelector,
 } from '../../utils/hooks/reduxTypedHooks'
 import cls from './BurgerConstructor.module.css'
-import ConstructorItem from '../ConstructorItem/ConstructorItem'
+import { ConstructorItem } from '../ConstructorItem/ConstructorItem'
 import { TEXT, TypografyTheme } from '../../utils/variables'
-import BunContainer from '../BunContainer/BunContainer'
+import { BunContainer } from '../BunContainer/BunContainer'
 import Preloader from '../Preloader/Preloader'
 
 interface BurgerConstructorProps {
