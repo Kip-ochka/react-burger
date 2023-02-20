@@ -2,7 +2,7 @@ import {
   Counter,
   CurrencyIcon,
 } from '@ya.praktikum/react-developer-burger-ui-components'
-import { useMemo, useState } from 'react'
+import { FC, useMemo } from 'react'
 import { useDrag } from 'react-dnd'
 import { Ingridient } from '../../types/ingridient'
 import { classNames } from '../../utils/helpers/classNames'
@@ -15,19 +15,21 @@ interface IngridientItemProps {
   onOpen: (data: Ingridient) => void
 }
 
-export const IngridientItem = (props: IngridientItemProps) => {
+export const IngridientItem: FC<IngridientItemProps> = (props) => {
   const { ingridient, onOpen } = props
 
-  const { inConstructor } = useAppSelector((state) => state.ingridients)
-  const [_, dragRef] = useDrag({
-    type: 'ingridient',
+  const { inConstructor } = useAppSelector((state) => state.burgerConstructor)
+
+  const [, dragRef] = useDrag({
+    type: ingridient.type,
     item: { ingridient },
   })
+
   const count = useMemo(() => {
     return inConstructor.filter((item) => {
       return item._id === ingridient._id
     }).length
-  }, [inConstructor])
+  }, [inConstructor, ingridient._id])
 
   return (
     <li
@@ -41,6 +43,7 @@ export const IngridientItem = (props: IngridientItemProps) => {
       <img
         src={ingridient.image}
         className={classNames(cls.img, {}, ['ml-4', 'mr-4'])}
+        alt={`${ingridient.name}`}
       />
       <div className={classNames(cls.priceWrapper)}>
         <p

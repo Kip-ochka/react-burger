@@ -1,4 +1,4 @@
-import React from 'react'
+import { FC } from 'react'
 import { Ingridient } from '../../types/ingridient'
 import { classNames } from '../../utils/helpers/classNames'
 import { TEXT, TypografyTheme } from '../../utils/variables'
@@ -8,14 +8,14 @@ interface ModalIngridientProps {
   ingridient: Ingridient | {}
 }
 
-function ModalIngridient(props: ModalIngridientProps) {
+export const ModalIngridient: FC<ModalIngridientProps> = (props) => {
   const { ingridient } = props
 
   const { image_large, name, calories, proteins, fat, carbohydrates } =
     ingridient as Ingridient
   return (
     <>
-      <img src={image_large} />
+      <img src={image_large} alt={`${name}`} />
       <p className={classNames(TEXT, {}, [TypografyTheme.medium, 'mt-4'])}>
         {name}
       </p>
@@ -96,5 +96,3 @@ function ModalIngridient(props: ModalIngridientProps) {
     </>
   )
 }
-
-export default ModalIngridient

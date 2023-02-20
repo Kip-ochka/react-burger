@@ -1,3 +1,4 @@
+import { FC } from 'react'
 import { classNames } from '../../utils/helpers/classNames'
 import cls from './ModalOverlay.module.css'
 
@@ -5,7 +6,7 @@ interface ModalOverlayProps {
   onClose: () => void
 }
 
-function ModalOverlay(props: ModalOverlayProps) {
+export const ModalOverlay: FC<ModalOverlayProps> = (props) => {
   return (
     <div
       className={classNames(cls.overlay)}
@@ -15,5 +16,3 @@ function ModalOverlay(props: ModalOverlayProps) {
     ></div>
   )
 }
-
-export default ModalOverlay

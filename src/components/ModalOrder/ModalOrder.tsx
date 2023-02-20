@@ -1,9 +1,12 @@
-import React from 'react'
 import { classNames } from '../../utils/helpers/classNames'
 import { TEXT, TypografyTheme } from '../../utils/variables'
 import { ReactComponent as Done } from '../../images/icons/graphics.svg'
 import cls from './ModalOrder.module.css'
-export const ModalOrder = () => {
+import { useAppSelector } from '../../utils/hooks/reduxTypedHooks'
+import { FC } from 'react'
+
+export const ModalOrder: FC = () => {
+  const { order } = useAppSelector((state) => state.order)
   return (
     <>
       <p
@@ -13,7 +16,7 @@ export const ModalOrder = () => {
           cls.shadow,
         ])}
       >
-        034536
+        {order?.order?.number}
       </p>
       <p className={classNames(TEXT, {}, [TypografyTheme.medium, 'mt-8'])}>
         идентификатор заказа

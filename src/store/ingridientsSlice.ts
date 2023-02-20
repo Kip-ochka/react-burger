@@ -1,5 +1,5 @@
 import { createAsyncThunk, createSlice } from '@reduxjs/toolkit'
-import { IngridientsData, IngridientSlice } from '../types/ingidientSlice'
+import { IngridientsData, IngridientsSlice } from '../types/ingridientsTypes'
 import { BASE_URL } from '../utils/variables'
 
 export const fetchGetIngridients = createAsyncThunk<
@@ -7,7 +7,7 @@ export const fetchGetIngridients = createAsyncThunk<
   undefined,
   { rejectValue: string }
 >('ingridients/getIngridients', async (_, { rejectWithValue }) => {
-  const response = await fetch(BASE_URL, {
+  const response = await fetch(`${BASE_URL}/ingredients`, {
     method: 'GET',
   })
   if (response.ok) {
@@ -18,21 +18,14 @@ export const fetchGetIngridients = createAsyncThunk<
   }
 })
 
-const ingridients = createSlice({
+const ingredients = createSlice({
   name: 'ingridients',
   initialState: {
     loading: false,
     error: null,
-    ingridientList: [],
-    inConstructor: [],
-    ingridientData: {},
-    order: { ingridients: [] },
-  } as IngridientSlice,
-  reducers: {
-    addIngridient: (state, action) => {
-      state.inConstructor = [...state.inConstructor, action.payload]
-    },
-  },
+    ingredients: [],
+  } as IngridientsSlice,
+  reducers: {},
   extraReducers: (builder) => {
     builder
       .addCase(fetchGetIngridients.pending, (state) => {
@@ -41,7 +34,7 @@ const ingridients = createSlice({
       })
       .addCase(fetchGetIngridients.fulfilled, (state, action) => {
         state.loading = false
-        state.ingridientList = action.payload.data
+        state.ingredients = action.payload.data
       })
       .addCase(fetchGetIngridients.rejected, (state, action) => {
         state.loading = false
@@ -49,5 +42,5 @@ const ingridients = createSlice({
       })
   },
 })
-export const { addIngridient } = ingridients.actions
-export default ingridients.reducer
+
+export default ingredients.reducer

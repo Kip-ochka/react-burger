@@ -1,5 +1,5 @@
 import { Tab } from '@ya.praktikum/react-developer-burger-ui-components'
-import { useMemo, useRef, useState } from 'react'
+import { FC, useEffect, useMemo, useRef, useState } from 'react'
 import { Ingridient } from '../../types/ingridient'
 import { classNames } from '../../utils/helpers/classNames'
 import { createSections } from '../../utils/helpers/createSections'
@@ -12,15 +12,44 @@ interface BurgerIngredientsProps {
   onOpen: (data: Ingridient) => void
 }
 
-export const BurgerIngredients = (props: BurgerIngredientsProps) => {
+interface Headers {
+  [key: string]: boolean
+}
+
+export const BurgerIngredients: FC<BurgerIngredientsProps> = (props) => {
   const { onOpen } = props
-  const { ingridientList, error } = useAppSelector((state) => state.ingridients)
+  const { ingredients, error } = useAppSelector((state) => state.ingridients)
   const sections = useMemo(
-    () => createSections(INGRIDIENT_TYPES, ingridientList),
-    [ingridientList]
+    () => createSections(INGRIDIENT_TYPES, ingredients),
+    [ingredients]
   )
   const [current, setCurrent] = useState('Булки')
-  const refs = useRef<HTMLHeadingElement[]>([])
+  const rootRef = useRef<HTMLUListElement | null>(null)
+  const refs = useRef<HTMLElement[]>([])
+
+  useEffect(() => {
+    let headers = {} as Headers
+    const observer = new IntersectionObserver(
+      (entrys) => {
+        for (const entry of entrys) {
+          headers[entry.target.textContent!] = entry.isIntersecting
+        }
+        for (const header in headers) {
+          if (headers[header]) {
+            setCurrent(header)
+            break
+          }
+        }
+      },
+      { root: rootRef.current, rootMargin: '0px 0px 0px 0px', threshold: 1 }
+    )
+
+    refs.current.forEach((el) => {
+      observer.observe(el)
+    })
+
+    return () => observer.disconnect()
+  }, [refs, sections])
 
   return (
     <section>
@@ -53,7 +82,7 @@ export const BurgerIngredients = (props: BurgerIngredientsProps) => {
               )
             })}
           </div>
-          <ul className={classNames(cls.container)}>
+          <ul className={classNames(cls.container)} ref={rootRef}>
             {sections.map((section, index) => {
               return (
                 <li

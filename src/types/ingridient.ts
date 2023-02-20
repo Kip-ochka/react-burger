@@ -11,4 +11,5 @@ export interface Ingridient {
   proteins: number
   type: string
   carbohydrates: number
+  key?: string
 }

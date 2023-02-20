@@ -1,4 +1,4 @@
-const BASE_URL = `https://norma.nomoreparties.space/api/ingredients`
+const BASE_URL = `https://norma.nomoreparties.space/api`
 const INACTIVE_COLOR = `text_color_inactive`
 const TEXT = 'text'
 const INGRIDIENT_TYPES = [
