@@ -18,7 +18,7 @@ interface IngridientItemProps {
 export const IngridientItem: FC<IngridientItemProps> = (props) => {
   const { ingridient, onOpen } = props
 
-  const { inConstructor } = useAppSelector((state) => state.ingridients)
+  const { inConstructor } = useAppSelector((state) => state.burgerConstructor)
 
   const [, dragRef] = useDrag({
     type: ingridient.type,

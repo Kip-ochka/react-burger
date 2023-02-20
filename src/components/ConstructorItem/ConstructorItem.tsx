@@ -4,7 +4,10 @@ import {
 } from '@ya.praktikum/react-developer-burger-ui-components'
 import { FC } from 'react'
 import { useDrag, useDrop } from 'react-dnd'
-import { moveIngridient, removeIngridient } from '../../store/ingridientsSlice'
+import {
+  moveIngridient,
+  removeIngridient,
+} from '../../store/burgerConstructorSlice'
 import { Ingridient } from '../../types/ingridient'
 import { classNames } from '../../utils/helpers/classNames'
 import { useAppDispatch } from '../../utils/hooks/reduxTypedHooks'

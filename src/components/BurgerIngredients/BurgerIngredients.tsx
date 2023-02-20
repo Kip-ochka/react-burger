@@ -18,10 +18,10 @@ interface Headers {
 
 export const BurgerIngredients: FC<BurgerIngredientsProps> = (props) => {
   const { onOpen } = props
-  const { ingridientList, error } = useAppSelector((state) => state.ingridients)
+  const { ingredients, error } = useAppSelector((state) => state.ingridients)
   const sections = useMemo(
-    () => createSections(INGRIDIENT_TYPES, ingridientList),
-    [ingridientList]
+    () => createSections(INGRIDIENT_TYPES, ingredients),
+    [ingredients]
   )
   const [current, setCurrent] = useState('Булки')
   const rootRef = useRef<HTMLUListElement | null>(null)

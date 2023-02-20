@@ -4,11 +4,6 @@ import {
 } from '@ya.praktikum/react-developer-burger-ui-components'
 import { useCallback, useMemo, useState } from 'react'
 import { useDrop } from 'react-dnd'
-import {
-  addIngridient,
-  cleanError,
-  fetchPostOrder,
-} from '../../store/ingridientsSlice'
 import { Ingridient } from '../../types/ingridient'
 import { classNames } from '../../utils/helpers/classNames'
 import {
@@ -20,6 +15,11 @@ import { ConstructorItem } from '../ConstructorItem/ConstructorItem'
 import { TEXT, TypografyTheme } from '../../utils/variables'
 import { BunContainer } from '../BunContainer/BunContainer'
 import Preloader from '../Preloader/Preloader'
+import {
+  addIngridient,
+  clearConstructor,
+} from '../../store/burgerConstructorSlice'
+import { cleanError, fetchPostOrder, setError } from '../../store/orderSlice'
 
 interface BurgerConstructorProps {
   onOpenOrder: () => void
@@ -27,9 +27,8 @@ interface BurgerConstructorProps {
 
 export const BurgerConstructor = (props: BurgerConstructorProps) => {
   const { onOpenOrder } = props
-  const { inConstructor, orderError, orderLoading } = useAppSelector(
-    (state) => state.ingridients
-  )
+  const { inConstructor } = useAppSelector((state) => state.burgerConstructor)
+  const { orderError, orderLoading } = useAppSelector((state) => state.order)
   const dispatch = useAppDispatch()
   const [isPlaceholder, setIsPlaceholder] = useState(inConstructor.length === 0)
 
@@ -61,10 +60,19 @@ export const BurgerConstructor = (props: BurgerConstructorProps) => {
 
   const makeOrderHandler = useCallback((inOrderArray: Ingridient[]) => {
     const data = inOrderArray.map((item) => item._id)
+    if (data.length === 0) {
+      dispatch(
+        setError(
+          `Заказ пустой, пожалуйста добавьте ингредиенты, и мы начнем готовить`
+        )
+      )
+      return
+    }
     dispatch(fetchPostOrder({ ingredients: data })).then((order) => {
       const { success } = order.payload
       if (success) {
         onOpenOrder()
+        dispatch(clearConstructor())
         dispatch(cleanError())
       }
     })

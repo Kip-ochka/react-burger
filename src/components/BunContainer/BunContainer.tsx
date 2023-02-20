@@ -1,7 +1,7 @@
 import { ConstructorElement } from '@ya.praktikum/react-developer-burger-ui-components'
 import { FC, ReactNode } from 'react'
 import { useDrop } from 'react-dnd'
-import { addIngridient } from '../../store/ingridientsSlice'
+import { addIngridient } from '../../store/burgerConstructorSlice'
 import { Ingridient } from '../../types/ingridient'
 import { classNames } from '../../utils/helpers/classNames'
 import { useAppDispatch } from '../../utils/hooks/reduxTypedHooks'

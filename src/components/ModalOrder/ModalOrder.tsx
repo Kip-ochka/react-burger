@@ -6,8 +6,7 @@ import { useAppSelector } from '../../utils/hooks/reduxTypedHooks'
 import { FC } from 'react'
 
 export const ModalOrder: FC = () => {
-  const { order } = useAppSelector((state) => state.ingridients)
-
+  const { order } = useAppSelector((state) => state.order)
   return (
     <>
       <p
