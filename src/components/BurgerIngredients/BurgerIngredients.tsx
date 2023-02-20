@@ -34,7 +34,6 @@ export const BurgerIngredients: FC<BurgerIngredientsProps> = (props) => {
         for (const entry of entrys) {
           headers[entry.target.textContent!] = entry.isIntersecting
         }
-        console.log(headers)
         for (const header in headers) {
           if (headers[header]) {
             setCurrent(header)

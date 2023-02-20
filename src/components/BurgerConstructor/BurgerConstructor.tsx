@@ -95,12 +95,12 @@ export const BurgerConstructor = (props: BurgerConstructorProps) => {
           inConstructor.map((item, index) => {
             if (item.type === 'bun') {
               return (
-                <BunContainer item={item} key={index}>
+                <BunContainer item={item} key={item.key}>
                   {inConstructor.map((item, index) => {
                     if (item.type !== 'bun') {
                       return (
                         <ConstructorItem
-                          key={index}
+                          key={item.key}
                           extraClass={cls.item}
                           ingridient={item}
                           subId={index}
@@ -128,9 +128,7 @@ export const BurgerConstructor = (props: BurgerConstructorProps) => {
           htmlType="button"
           type="primary"
           size="large"
-          onClick={() => {
-            makeOrderHandler(inConstructor)
-          }}
+          onClick={() => makeOrderHandler(inConstructor)}
         >
           Оформить заказ
         </Button>

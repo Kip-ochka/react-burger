@@ -1,4 +1,4 @@
-import { createAsyncThunk, createSlice } from '@reduxjs/toolkit'
+import { createAsyncThunk, createSlice, nanoid } from '@reduxjs/toolkit'
 import {
   IncomingOrder,
   IngridientsData,
@@ -58,10 +58,16 @@ const ingridients = createSlice({
     addIngridient: (state, action) => {
       const { ingridient } = action.payload
       if (ingridient.type === 'bun') {
-        state.inConstructor = [ingridient, ...state.inConstructor.slice(1)]
+        state.inConstructor = [
+          { ...ingridient, key: nanoid() },
+          ...state.inConstructor.slice(1),
+        ]
         return
       }
-      state.inConstructor = [...state.inConstructor, ingridient]
+      state.inConstructor = [
+        ...state.inConstructor,
+        { ...ingridient, key: nanoid() },
+      ]
     },
     removeIngridient: (state, action) => {
       state.inConstructor = state.inConstructor.filter((item, index) => {

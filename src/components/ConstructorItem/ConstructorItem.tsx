@@ -47,9 +47,7 @@ export const ConstructorItem: FC<ConstructorItemProps> = (
         price={ingridient.price}
         isLocked={false}
         thumbnail={ingridient.image}
-        handleClose={() => {
-          dispatch(removeIngridient(subId))
-        }}
+        handleClose={() => dispatch(removeIngridient(subId))}
       />
     </div>
   )
