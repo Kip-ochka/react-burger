@@ -20,6 +20,7 @@ import {
   clearConstructor,
 } from '../../store/burgerConstructorSlice'
 import { cleanError, fetchPostOrder, setError } from '../../store/orderSlice'
+import { Reorder } from 'framer-motion'
 
 interface BurgerConstructorProps {
   onOpenOrder: () => void
@@ -107,12 +108,14 @@ export const BurgerConstructor = (props: BurgerConstructorProps) => {
                   {inConstructor.map((item, index) => {
                     if (item.type !== 'bun') {
                       return (
-                        <ConstructorItem
-                          key={item.key}
-                          extraClass={cls.item}
-                          ingridient={item}
-                          subId={index}
-                        />
+                        <Reorder.Item value={item} key={item.key}>
+                          <ConstructorItem
+                            key={item.key}
+                            extraClass={cls.item}
+                            ingridient={item}
+                            subId={index}
+                          />
+                        </Reorder.Item>
                       )
                     }
                   })}

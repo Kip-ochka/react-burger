@@ -1,5 +1,6 @@
 import { createSlice, nanoid } from '@reduxjs/toolkit'
 import { BurgerConstructorSlice } from '../types/burgerConstructorTypes'
+import { Ingridient } from '../types/ingridient'
 
 const burgerConstructor = createSlice({
   name: 'burgerConstructor',
@@ -27,16 +28,12 @@ const burgerConstructor = createSlice({
       })
     },
     moveIngridient: (state, action) => {
-      const { item, subId } = action.payload
-      const dragIndex = item.subId
-      const hoverIndex = subId
-      if (item.subId === subId) return
-      state.inConstructor.splice(
-        dragIndex,
-        0,
-        state.inConstructor.splice(hoverIndex, 1)[0]
-      )
-      item.subId = hoverIndex
+      state.inConstructor = [
+        state.inConstructor[0],
+        ...action.payload.filter((item: Ingridient) => {
+          return item.type !== 'bun'
+        }),
+      ]
     },
     clearConstructor: (state) => {
       state.inConstructor = []

@@ -9,7 +9,6 @@
   display: flex;
   flex-direction: column;
   gap: 16px;
-
   height: 40vh;
   overflow-y: auto;
   overflow-x: hidden;

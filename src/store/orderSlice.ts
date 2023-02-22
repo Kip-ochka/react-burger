@@ -1,5 +1,5 @@
-import { createAsyncThunk, createSlice, nanoid } from '@reduxjs/toolkit'
-import { IncomingOrder, OrderSlice, OutcomingOrder } from '../types/orderTypes'
+import { createAsyncThunk, createSlice } from '@reduxjs/toolkit'
+import { OrderSlice, OutcomingOrder } from '../types/orderTypes'
 import { BASE_URL } from '../utils/variables'
 
 export const fetchPostOrder = createAsyncThunk(

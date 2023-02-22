@@ -1,10 +1,17 @@
 import { ConstructorElement } from '@ya.praktikum/react-developer-burger-ui-components'
+import { Reorder } from 'framer-motion'
 import { FC, ReactNode } from 'react'
 import { useDrop } from 'react-dnd'
-import { addIngridient } from '../../store/burgerConstructorSlice'
+import {
+  addIngridient,
+  moveIngridient,
+} from '../../store/burgerConstructorSlice'
 import { Ingridient } from '../../types/ingridient'
 import { classNames } from '../../utils/helpers/classNames'
-import { useAppDispatch } from '../../utils/hooks/reduxTypedHooks'
+import {
+  useAppDispatch,
+  useAppSelector,
+} from '../../utils/hooks/reduxTypedHooks'
 import cls from './BunContainer.module.css'
 
 interface BunContainerProps {
@@ -15,7 +22,7 @@ interface BunContainerProps {
 export const BunContainer: FC<BunContainerProps> = (props) => {
   const { item, children } = props
   const dispatch = useAppDispatch()
-
+  const { inConstructor } = useAppSelector((state) => state.burgerConstructor)
   const [{ isHoverTarget }, dropTargetInner] = useDrop({
     accept: ['main', 'sauce'],
     drop(item: { ingridient: Ingridient }) {
@@ -36,7 +43,9 @@ export const BunContainer: FC<BunContainerProps> = (props) => {
         thumbnail={item.image}
         extraClass={classNames(cls.item, {}, ['ml-8', 'mb-4'])}
       />
-      <div
+      <Reorder.Group
+        values={inConstructor}
+        onReorder={(newOrder) => dispatch(moveIngridient(newOrder))}
         ref={dropTargetInner}
         className={classNames(
           cls.container,
@@ -45,7 +54,7 @@ export const BunContainer: FC<BunContainerProps> = (props) => {
         )}
       >
         {children}
-      </div>
+      </Reorder.Group>
       <ConstructorElement
         text={`${item.name} (низ)`}
         price={item.price}
