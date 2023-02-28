@@ -1,6 +1,4 @@
 import { FC, useEffect } from 'react'
-import { Route, Routes } from 'react-router-dom'
-import { ConstructorPage } from '../../page/ConstructorPage/ConstructorPage'
 import { classNames } from '../../utils/helpers/classNames'
 import { AppHeader } from '../AppHeader/AppHeader'
 import cls from './App.module.css'
@@ -9,6 +7,9 @@ import {
   useAppSelector,
 } from '../../utils/hooks/reduxTypedHooks'
 import { fetchGetIngridients } from '../../store/ingridientsSlice'
+import Preloader from '../Preloader/Preloader'
+import { PageLayout } from '../PageLayout/PageLayout'
+import AppRoutes from '../AppRoutes/AppRoutes'
 
 export const App: FC = () => {
   const dispatch = useAppDispatch()
@@ -21,11 +22,11 @@ export const App: FC = () => {
     <div className={classNames(cls.app)}>
       <AppHeader />
       {loading ? (
-        'Loading...'
+        <PageLayout>
+          <Preloader />
+        </PageLayout>
       ) : (
-        <Routes>
-          <Route path="/" element={<ConstructorPage />} />
-        </Routes>
+        <AppRoutes />
       )}
     </div>
   )

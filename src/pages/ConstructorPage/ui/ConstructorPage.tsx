@@ -1,18 +1,18 @@
-import React, { FC, useState } from 'react'
+import { FC, useState, memo } from 'react'
 import { DndProvider } from 'react-dnd'
 import { HTML5Backend } from 'react-dnd-html5-backend'
-import { BurgerConstructor } from '../../components/BurgerConstructor/BurgerConstructor'
-import { BurgerIngredients } from '../../components/BurgerIngredients/BurgerIngredients'
-import { Modal } from '../../components/Modal/Modal'
-import { ModalIngridient } from '../../components/ModalIngridient/ModalIngridient'
-import { ModalOrder } from '../../components/ModalOrder/ModalOrder'
-import { Ingridient } from '../../types/ingridient'
-import { classNames } from '../../utils/helpers/classNames'
+import { BurgerConstructor } from '../../../components/BurgerConstructor/BurgerConstructor'
+import { BurgerIngredients } from '../../../components/BurgerIngredients/BurgerIngredients'
+import { Modal } from '../../../components/Modal/Modal'
+import { ModalIngridient } from '../../../components/ModalIngridient/ModalIngridient'
+import { ModalOrder } from '../../../components/ModalOrder/ModalOrder'
+import { Ingridient } from '../../../types/ingridient'
+import { classNames } from '../../../utils/helpers/classNames'
 import cls from './ConstructorPage.module.css'
 
 interface ConstructorPageProps {}
 
-export const ConstructorPage: FC<ConstructorPageProps> = React.memo(() => {
+const ConstructorPage: FC<ConstructorPageProps> = memo(() => {
   const [isOpenInfo, setIsOpenInfo] = useState(false)
   const [isOpenOrder, setIsOpenOrder] = useState(false)
   const [infoData, setIsInfoData] = useState({})
@@ -21,7 +21,7 @@ export const ConstructorPage: FC<ConstructorPageProps> = React.memo(() => {
     setIsInfoData(data)
     setTimeout(() => {
       setIsOpenInfo(true)
-    }, 50)
+    }, 100)
   }
 
   const handleClose = () => {
@@ -55,3 +55,5 @@ export const ConstructorPage: FC<ConstructorPageProps> = React.memo(() => {
     </main>
   )
 })
+
+export default ConstructorPage
