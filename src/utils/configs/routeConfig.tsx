@@ -24,7 +24,7 @@ export const RoutePath: Record<AppRoutes, string> = {
   [AppRoutes.REGISTER]: '/register',
   [AppRoutes.FORGOT_PASSWORD]: '/forgot-password',
   [AppRoutes.RESET_PASSWORD]: '/reset-password',
-  [AppRoutes.PROFILE]: '/profile',
+  [AppRoutes.PROFILE]: '/profile/*',
   [AppRoutes.INGREDIENTS_ID]: '/ingredients/:id',
   //последний
   [AppRoutes.NOT_FOUND]: '*',
