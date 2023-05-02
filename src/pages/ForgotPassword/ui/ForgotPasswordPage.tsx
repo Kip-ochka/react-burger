@@ -10,7 +10,7 @@ import {TypografyTheme} from '../../../utils/variables'
 import cls from './ForgotPasswordPage.module.css'
 import {useFormAndValidation} from "../../../utils/hooks/useFormAndValidation";
 import {useAppDispatch, useAppSelector} from "../../../utils/hooks/reduxTypedHooks";
-import {fetchForgotPassword} from "../../../store/userSlice";
+import {fetchForgotPassword, setError} from "../../../store/userSlice";
 import Preloader from "../../../components/Preloader/Preloader";
 import ErrorMessage from "../../../components/ErrorMessage/ErrorMessage";
 
@@ -35,6 +35,9 @@ const ForgotPasswordPage = () => {
                                     navigate('/reset-password')
                                     resetForm()
                                 }
+                                setTimeout(() => {
+                                    dispatch(setError(null))
+                                }, 2000)
                             })
                         }}
                     >

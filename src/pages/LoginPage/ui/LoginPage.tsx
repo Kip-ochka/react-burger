@@ -12,14 +12,14 @@ import cls from './LoginPage.module.css'
 import {useFormAndValidation} from "../../../utils/hooks/useFormAndValidation";
 import {useAppDispatch, useAppSelector} from "../../../utils/hooks/reduxTypedHooks";
 import ErrorMessage from "../../../components/ErrorMessage/ErrorMessage";
-import {fetchLogin} from "../../../store/userSlice";
+import {fetchLogin, setError} from "../../../store/userSlice";
 import Preloader from "../../../components/Preloader/Preloader";
 
 const LoginPage = memo(() => {
     const [isPassword, setIsPassword] = useState(true)
     const {
         values, handleChange, errors, isValid, isButtonDisabled, resetForm,
-    } = useFormAndValidation({email: '', password:''})
+    } = useFormAndValidation({email: '', password: ''})
     const navigate = useNavigate()
     const dispatch = useAppDispatch()
     const {error, userLoading} = useAppSelector((state) => state.user)
@@ -38,6 +38,9 @@ const LoginPage = memo(() => {
                                         navigate('/')
                                         resetForm()
                                     }
+                                    setTimeout(() => {
+                                        dispatch(setError(null))
+                                    }, 2000)
                                 })
                         }}>
                         <h1 className={classNames(TEXT, {}, [TypografyTheme.medium])}>Вход</h1>

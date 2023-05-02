@@ -4,7 +4,7 @@ import {classNames} from '../../utils/helpers/classNames'
 import {INACTIVE_COLOR, TEXT, TypografyTheme} from '../../utils/variables'
 import cls from './ProfileNav.module.css'
 import {useAppDispatch} from "../../utils/hooks/reduxTypedHooks";
-import {fetchLogout} from "../../store/userSlice";
+import {fetchLogout, setError} from "../../store/userSlice";
 
 export const ProfileNav: FC = () => {
     const {pathname} = useLocation()
@@ -46,6 +46,9 @@ export const ProfileNav: FC = () => {
                         if(res.type === 'user/logout/fulfilled') {
                             navigate('/')
                         }
+                        setTimeout(() => {
+                            dispatch(setError(null))
+                        }, 2000)
                     })
                 }}
             >

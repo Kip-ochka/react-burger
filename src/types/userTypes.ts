@@ -55,13 +55,15 @@ export interface LogoutResponse {
 }
 
 export interface SetUserPayload {
-    name?: string
-    email?: string
-    password?: string
+    data: {
+        name?: string
+        email?: string
+        password?: string
+    }
 }
 
 export interface SetUserResponse {
-    success: true,
+    success: boolean,
     user: User
 }
 

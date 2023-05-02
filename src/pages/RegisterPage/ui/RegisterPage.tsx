@@ -6,7 +6,7 @@ import {memo, useState} from 'react'
 import {Link, useNavigate} from 'react-router-dom'
 import {PageLayout} from '../../../components/PageLayout/PageLayout'
 import Preloader from '../../../components/Preloader/Preloader'
-import {fetchRegister} from '../../../store/userSlice'
+import {fetchRegister, setError} from '../../../store/userSlice'
 import {classNames} from '../../../utils/helpers/classNames'
 import {
     useAppDispatch,
@@ -49,6 +49,9 @@ const RegisterPage = memo(() => {
                                     navigate('/')
                                     resetForm()
                                 }
+                                setTimeout(() => {
+                                    dispatch(setError(null))
+                                }, 2000)
                             })
                         }}
                     >

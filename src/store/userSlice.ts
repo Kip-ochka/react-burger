@@ -129,10 +129,16 @@ export const getUser = createAsyncThunk<
 export const setUser = createAsyncThunk<
     SetUserResponse, SetUserPayload, { rejectValue: string }
 >('user/setUser', async (payload, {rejectWithValue}) => {
+    console.log(localStorage.getItem('access'))
     const response = await fetch('https://norma.nomoreparties.space/api/auth/user', {
-        method: 'POST',
+        method: 'PATCH',
+        credentials: "same-origin",
+        mode: "cors",
+        cache: "no-cache",
+        redirect: "follow",
+        referrerPolicy: "no-referrer",
         headers: {'Content-Type': 'application/json', Authorization: localStorage.getItem('access')!},
-        body: JSON.stringify({email: payload.email, name: payload.name, password: payload.password})
+        body: JSON.stringify(payload.data)
     })
     const data = await response.json()
     if (data.success) {
@@ -290,7 +296,28 @@ const userSlice = createSlice({
             state.isLogged = true
             state.userLoading = false
         })
-        builder.addCase(getUser.rejected, (state) => {
+        builder.addCase(getUser.rejected, (state, action) => {
+            if (action.payload) {
+                state.error = action.payload
+            }
+            state.userLoading = false
+        })
+        builder.addCase(setUser.pending, (state) => {
+            state.error = null
+            state.userLoading = true
+        })
+        builder.addCase(setUser.fulfilled, (state, action) => {
+            state.error = null
+            if (action.payload.user) {
+                state.user = action.payload.user
+            }
+            state.isLogged = true
+            state.userLoading = false
+        })
+        builder.addCase(setUser.rejected, (state, action) => {
+            if (action.payload) {
+                state.error = action.payload
+            }
             state.userLoading = false
         })
 

@@ -13,7 +13,7 @@ import {useFormAndValidation} from "../../../utils/hooks/useFormAndValidation";
 import {useAppDispatch, useAppSelector} from "../../../utils/hooks/reduxTypedHooks";
 import ErrorMessage from "../../../components/ErrorMessage/ErrorMessage";
 import Preloader from "../../../components/Preloader/Preloader";
-import {fetchResetPassword} from "../../../store/userSlice";
+import {fetchResetPassword, setError} from "../../../store/userSlice";
 
 const ResetPasswordPage = () => {
     const [isPassword, setIsPassword] = useState(true)
@@ -37,6 +37,9 @@ const ResetPasswordPage = () => {
                                     navigate('/login')
                                     resetForm()
                                 }
+                                setTimeout(() => {
+                                    dispatch(setError(null))
+                                }, 2000)
                             })
                         }}
                     >
