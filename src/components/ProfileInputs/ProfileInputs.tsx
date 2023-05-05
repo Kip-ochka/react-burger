@@ -1,15 +1,17 @@
-import { Input} from '@ya.praktikum/react-developer-burger-ui-components'
-import React, {FC, useEffect, useState} from 'react'
+import {Input} from '@ya.praktikum/react-developer-burger-ui-components'
+import React, {FC, useCallback, useEffect, useState} from 'react'
 import {classNames} from '../../utils/helpers/classNames'
 import cls from './ProfileInputs.module.css'
 import {useFormAndValidation} from "../../utils/hooks/useFormAndValidation";
 import {useAppDispatch, useAppSelector} from "../../utils/hooks/reduxTypedHooks";
-import {setError, setUser} from "../../store/userSlice";
+import {fetchRefreshAccessToken, setError, setUser} from "../../store/userSlice";
 import ErrorMessage from "../ErrorMessage/ErrorMessage";
+import {useNavigate} from "react-router-dom";
 
 export const ProfileInputs: FC = () => {
     const {user, error} = useAppSelector((state) => state.user)
     const dispatch = useAppDispatch()
+    const navigate = useNavigate()
     const {name, email} = user
     const {values, isValid, setIsValid, setValues, handleChange, errors} = useFormAndValidation({
         name: name,
@@ -24,7 +26,7 @@ export const ProfileInputs: FC = () => {
         setIsChange({...isChange, [e.target.name]: true})
     }
 
-    const handleLeaveFocus = (e: React.FocusEvent<HTMLInputElement>) => {
+    const handleLeaveFocus = useCallback((e: React.FocusEvent<HTMLInputElement>) => {
         const inputName = e.target.name
         const isPassword = inputName === 'password'
         if (!isPassword) {
@@ -56,12 +58,20 @@ export const ProfileInputs: FC = () => {
                         dispatch(setError(null))
                     }, 2000)
                 }
+                if (res.payload === 'jwt expired' && localStorage.getItem('refresh')) {
+                    dispatch(fetchRefreshAccessToken()).then(res => {
+                        if (res.type === 'user/refreshToken/rejected') {
+                            dispatch(setError(null))
+                        }
+                    })
+                } else {
+                    navigate('/login')
+                }
             })
             return
         }
-
         dispatch(setError(`Поле ${inputName} некорректно`))
-    }
+    }, [user, dispatch, email, isValid, name, navigate, setIsValid, setValues, values])
 
     useEffect(() => {
         setValues({name: name, email: email, password: '******'})
