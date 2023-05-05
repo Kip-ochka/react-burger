@@ -13,14 +13,21 @@ import {useAppDispatch, useAppSelector} from "../../../utils/hooks/reduxTypedHoo
 import {fetchForgotPassword, setError} from "../../../store/userSlice";
 import Preloader from "../../../components/Preloader/Preloader";
 import ErrorMessage from "../../../components/ErrorMessage/ErrorMessage";
+import { Navigate } from "react-router-dom";
+import {FC, memo} from "react";
 
-const ForgotPasswordPage = () => {
+const ForgotPasswordPage:FC = memo(() => {
     const {
         values, handleChange, errors, isValid, isButtonDisabled, resetForm,
     } = useFormAndValidation({email: ''})
     const navigate = useNavigate()
     const dispatch = useAppDispatch()
-    const {error, userLoading} = useAppSelector((state) => state.user)
+    const {error, userLoading, isLogged} = useAppSelector((state) => state.user)
+
+    if (isLogged) {
+        return <Navigate to={"/"} replace />
+    }
+
     return (
         <PageLayout>
             {userLoading
@@ -32,7 +39,7 @@ const ForgotPasswordPage = () => {
                             e.preventDefault()
                             dispatch(fetchForgotPassword({email: values.emails})).then(res => {
                                 if (res.type === 'user/forgotPassword/fulfilled') {
-                                    navigate('/reset-password')
+                                    navigate('/reset-password', { state: "/forgot-password" })
                                     resetForm()
                                 }
                                 setTimeout(() => {
@@ -80,6 +87,6 @@ const ForgotPasswordPage = () => {
 
         </PageLayout>
     )
-}
+})
 
 export default ForgotPasswordPage

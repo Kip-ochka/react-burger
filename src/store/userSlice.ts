@@ -129,7 +129,6 @@ export const getUser = createAsyncThunk<
 export const setUser = createAsyncThunk<
     SetUserResponse, SetUserPayload, { rejectValue: string }
 >('user/setUser', async (payload, {rejectWithValue}) => {
-    console.log(localStorage.getItem('access'))
     const response = await fetch('https://norma.nomoreparties.space/api/auth/user', {
         method: 'PATCH',
         credentials: "same-origin",

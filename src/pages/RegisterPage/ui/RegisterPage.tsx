@@ -2,8 +2,8 @@ import {
     Button,
     Input,
 } from '@ya.praktikum/react-developer-burger-ui-components'
-import {memo, useState} from 'react'
-import {Link, useNavigate} from 'react-router-dom'
+import {FC, memo, useState} from 'react'
+import {Link, Navigate, useNavigate} from 'react-router-dom'
 import {PageLayout} from '../../../components/PageLayout/PageLayout'
 import Preloader from '../../../components/Preloader/Preloader'
 import {fetchRegister, setError} from '../../../store/userSlice'
@@ -18,7 +18,7 @@ import {TypografyTheme, TEXT} from '../../../utils/variables'
 import cls from './RegisterPage.module.css'
 import ErrorMessage from "../../../components/ErrorMessage/ErrorMessage";
 
-const RegisterPage = memo(() => {
+const RegisterPage:FC = memo(() => {
     const [isPassword, setIsPassword] = useState(true)
     const {values, handleChange, isValid, errors, isButtonDisabled, resetForm} = useFormAndValidation({
         name: '',
@@ -31,9 +31,12 @@ const RegisterPage = memo(() => {
         password: values.password,
     }
     const dispatch = useAppDispatch()
-    const {error, userLoading} = useAppSelector((state) => state.user)
+    const {error, userLoading, isLogged} = useAppSelector((state) => state.user)
     const navigate = useNavigate()
 
+    if (isLogged) {
+        return <Navigate to={"/"} replace/>
+    }
     return (
         <PageLayout>
             {userLoading ? (

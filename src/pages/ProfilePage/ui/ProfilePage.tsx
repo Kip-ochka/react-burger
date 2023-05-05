@@ -1,4 +1,4 @@
-import {FC} from 'react'
+import {FC, memo} from 'react'
 import {TEXT} from 'react-dnd-html5-backend/dist/NativeTypes'
 import {Route, Routes} from 'react-router-dom'
 import {ProfileInputs} from '../../../components/ProfileInputs/ProfileInputs'
@@ -9,7 +9,7 @@ import cls from './ProfilePage.module.css'
 import {useAppSelector} from "../../../utils/hooks/reduxTypedHooks";
 import Preloader from "../../../components/Preloader/Preloader";
 
-const ProfilePage: FC = () => {
+const ProfilePage: FC = memo(() => {
     const {userLoading} = useAppSelector(state => state.user)
     return (
         <main className={classNames(cls.page)}>
@@ -55,6 +55,6 @@ const ProfilePage: FC = () => {
 
         </main>
     )
-}
+})
 
 export default ProfilePage

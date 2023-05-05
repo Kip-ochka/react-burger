@@ -2,8 +2,8 @@ import {
     Button,
     Input,
 } from '@ya.praktikum/react-developer-burger-ui-components'
-import {memo, useState} from 'react'
-import {Link, useNavigate} from 'react-router-dom'
+import {FC, memo, useState} from 'react'
+import {Link, Navigate, useNavigate} from 'react-router-dom'
 import {PageLayout} from '../../../components/PageLayout/PageLayout'
 import {classNames} from '../../../utils/helpers/classNames'
 import {TEXT, TypografyTheme} from '../../../utils/variables'
@@ -15,14 +15,18 @@ import ErrorMessage from "../../../components/ErrorMessage/ErrorMessage";
 import {fetchLogin, setError} from "../../../store/userSlice";
 import Preloader from "../../../components/Preloader/Preloader";
 
-const LoginPage = memo(() => {
+const LoginPage:FC = memo(() => {
     const [isPassword, setIsPassword] = useState(true)
     const {
         values, handleChange, errors, isValid, isButtonDisabled, resetForm,
     } = useFormAndValidation({email: '', password: ''})
     const navigate = useNavigate()
     const dispatch = useAppDispatch()
-    const {error, userLoading} = useAppSelector((state) => state.user)
+    const {error, userLoading, isLogged} = useAppSelector((state) => state.user)
+
+    if (isLogged) {
+        return <Navigate to={"/"} replace />
+    }
     return (
         <PageLayout>
             {userLoading

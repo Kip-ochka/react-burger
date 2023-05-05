@@ -5,8 +5,9 @@ import { classNames } from '../../../utils/helpers/classNames'
 import { TEXT, TypografyTheme } from '../../../utils/variables'
 
 import cls from './NotFound.module.css'
+import {FC} from "react";
 
-const NotFoundPage = () => {
+const NotFoundPage:FC = () => {
   const navigate = useNavigate()
   return (
     <PageLayout>

@@ -1,6 +1,5 @@
 import { Tab } from '@ya.praktikum/react-developer-burger-ui-components'
 import { FC, useEffect, useMemo, useRef, useState } from 'react'
-import { Ingridient } from '../../types/ingridient'
 import { classNames } from '../../utils/helpers/classNames'
 import { createSections } from '../../utils/helpers/createSections'
 import { useAppSelector } from '../../utils/hooks/reduxTypedHooks'
@@ -9,15 +8,14 @@ import { IngridientItem } from '../IngridientItem/IngridientItem'
 import cls from './BurgerIngredients.module.css'
 
 interface BurgerIngredientsProps {
-  onOpen: (data: Ingridient) => void
+
 }
 
 interface Headers {
   [key: string]: boolean
 }
 
-export const BurgerIngredients: FC<BurgerIngredientsProps> = (props) => {
-  const { onOpen } = props
+export const BurgerIngredients: FC<BurgerIngredientsProps> = () => {
   const { ingredients, error } = useAppSelector((state) => state.ingridients)
   const sections = useMemo(
     () => createSections(INGRIDIENT_TYPES, ingredients),
@@ -109,7 +107,6 @@ export const BurgerIngredients: FC<BurgerIngredientsProps> = (props) => {
                         <IngridientItem
                           key={item._id}
                           ingridient={item}
-                          onOpen={onOpen}
                         />
                       )
                     })}

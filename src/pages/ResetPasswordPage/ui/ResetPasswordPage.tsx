@@ -2,9 +2,9 @@ import {
     Button,
     Input,
 } from '@ya.praktikum/react-developer-burger-ui-components'
-import {useState} from 'react'
+import {FC, memo, useEffect, useState} from 'react'
 import {TEXT} from 'react-dnd-html5-backend/dist/NativeTypes'
-import {Link, useNavigate} from 'react-router-dom'
+import {Link, useLocation, useNavigate} from 'react-router-dom'
 import {PageLayout} from '../../../components/PageLayout/PageLayout'
 import {classNames} from '../../../utils/helpers/classNames'
 import {TypografyTheme} from '../../../utils/variables'
@@ -15,14 +15,22 @@ import ErrorMessage from "../../../components/ErrorMessage/ErrorMessage";
 import Preloader from "../../../components/Preloader/Preloader";
 import {fetchResetPassword, setError} from "../../../store/userSlice";
 
-const ResetPasswordPage = () => {
+const ResetPasswordPage:FC = memo(() => {
     const [isPassword, setIsPassword] = useState(true)
     const {
         values, handleChange, errors, isValid, isButtonDisabled, resetForm,
-    } = useFormAndValidation({password: '', code:''})
+    } = useFormAndValidation({password: '', code: ''})
     const navigate = useNavigate()
+    const {state} = useLocation();
     const dispatch = useAppDispatch()
     const {error, userLoading} = useAppSelector((state) => state.user)
+
+    useEffect(() => {
+        if (state !== '/forgot-password') {
+            navigate('/');
+        }
+    }, [navigate, state]);
+
     return (
         <PageLayout>
             {userLoading
@@ -32,7 +40,7 @@ const ResetPasswordPage = () => {
                         className={cls.form}
                         onSubmit={(e) => {
                             e.preventDefault()
-                            dispatch(fetchResetPassword({password: values.password, code: values.code})).then((res)=>{
+                            dispatch(fetchResetPassword({password: values.password, code: values.code})).then((res) => {
                                 if (res.type === 'user/resetPassword/fulfilled') {
                                     navigate('/login')
                                     resetForm()
@@ -95,6 +103,7 @@ const ResetPasswordPage = () => {
 
         </PageLayout>
     )
-}
+})
 
 export default ResetPasswordPage
+
