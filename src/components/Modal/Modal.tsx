@@ -1,4 +1,4 @@
-import React, {FC, useEffect, useMemo} from 'react'
+import React, {FC, useEffect} from 'react'
 import cls from './Modal.module.css'
 import {classNames} from '../../utils/helpers/classNames'
 import {CloseIcon} from '@ya.praktikum/react-developer-burger-ui-components'
@@ -9,14 +9,13 @@ import {ModalOverlay} from '../ModalOverlay/ModalOverlay'
 const reactModals = document.getElementById('react-modals') as HTMLElement
 
 interface ModalProps {
-    isOpen?: boolean
     children: React.ReactNode
     title?: string
     onClose: () => void
 }
 
 export const Modal: FC<ModalProps> = (props) => {
-    const {children, title, isOpen, onClose} = props
+    const {children, title, onClose} = props
 
     useEffect(() => {
         const close = (evt: KeyboardEvent) => {
@@ -28,16 +27,8 @@ export const Modal: FC<ModalProps> = (props) => {
         return () => window.removeEventListener('keyup', close)
     }, [onClose])
 
-    const isOpec = useMemo(() => {
-        if (typeof isOpen === 'boolean') {
-            return isOpen
-        } else {
-            return true
-        }
-    }, [isOpen])
-
     return ReactDOM.createPortal(
-        <div className={classNames(cls.portal, {[cls.opened]: isOpec}, [])}>
+        <div className={classNames(cls.portal, {}, [cls.opened])}>
             <ModalOverlay onClose={onClose}/>
             <div className={classNames(cls.modal)}>
                 <div className={classNames(cls.header)}>

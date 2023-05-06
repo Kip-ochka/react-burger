@@ -1,17 +1,17 @@
 import {createAsyncThunk, createSlice} from '@reduxjs/toolkit'
 import {IngridientsData, IngridientsSlice} from '../types/ingridientsTypes'
-import {BASE_URL} from '../utils/variables'
-import {getResponseData} from "../utils/helpers/checkResponse";
+import {request} from "../utils/helpers/checkResponse";
 
 export const fetchGetIngridients = createAsyncThunk<
     IngridientsData,
     void,
     {rejectValue:string}
 >('ingridients/getIngridients', async (_,{rejectWithValue}) => {
-    const response = await fetch(`${BASE_URL}/ingredients`, {
-        method: 'GET',
-    })
-    return await getResponseData(response, rejectWithValue)
+    try{
+       return await request(`/ingredients`)
+    }catch (e) {
+       return rejectWithValue(e as string)
+    }
 })
 
 const ingredients = createSlice({
@@ -39,6 +39,7 @@ const ingredients = createSlice({
             })
             .addCase(fetchGetIngridients.rejected, (state, action) => {
                 state.loading = false
+                console.log(action)
                 state.error = action.payload
             })
     },

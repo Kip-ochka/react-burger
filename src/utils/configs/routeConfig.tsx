@@ -40,19 +40,19 @@ export const routeConfig: Record<AppRoutes, RouteProps> = {
     },
     [AppRoutes.LOGIN]: {
         path: RoutePath.login,
-        element: <LoginPage/>,
+        element: <ProtectedRoute anonymous element={<LoginPage/>}/>,
     },
     [AppRoutes.REGISTER]: {
         path: RoutePath.register,
-        element: <RegisterPage/>,
+        element: <ProtectedRoute anonymous element={<RegisterPage/>}/>,
     },
     [AppRoutes.FORGOT_PASSWORD]: {
         path: RoutePath['forgot-password'],
-        element: <ForgotPasswordPage/>,
+        element: <ProtectedRoute anonymous element={<ForgotPasswordPage/>}/>,
     },
     [AppRoutes.RESET_PASSWORD]: {
         path: RoutePath['reset-password'],
-        element: <ResetPasswordPage/>,
+        element: <ProtectedRoute anonymous element={<ResetPasswordPage/>}/>,
     },
     [AppRoutes.PROFILE]: {
         path: RoutePath.profile,

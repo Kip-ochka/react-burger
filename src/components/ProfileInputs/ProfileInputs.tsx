@@ -51,15 +51,13 @@ export const ProfileInputs: FC = () => {
 
         if (!isValid[inputName]) {
             dispatch(setUser({data: {[inputName]: values[inputName]}})).then(res => {
-                if ((res.payload=== 'You should be authorised'||res.payload==='jwt expired')&&localStorage.getItem('refresh')) {
+                if ((res.payload === 'Ошибка 401' || res.payload === 'Ошибка 403') && localStorage.getItem('refresh')) {
                     dispatch(fetchRefreshAccessToken()).then(res => {
                         dispatch(setUser({data: {[inputName]: values[inputName]}}))
                         if (res.type === 'user/refreshToken/rejected') {
                             dispatch(setError(null))
-                        } else {
-
+                            return
                         }
-                        return
                     })
                 }
                 if (res.type !== 'user/setUser/fulfilled') {
@@ -68,9 +66,7 @@ export const ProfileInputs: FC = () => {
                     }, 2000)
                     return
                 }
-
             })
-            return
         }
         dispatch(setError(`Поле ${inputName} некорректно`))
     }, [user, dispatch, email, isValid, name, setIsValid, setValues, values])

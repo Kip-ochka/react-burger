@@ -55,9 +55,12 @@ export const BurgerIngredients: FC<BurgerIngredientsProps> = () => {
         Соберите бургер
       </h1>
       {error ? (
-        <p
-          className={classNames(TEXT, {}, [TypografyTheme.medium, 'mt-10'])}
-        >{`Произошла ошибка ${error} - ингредиенты не найдены`}</p>
+          <div className={cls.errorWrapper}>
+            <p
+                className={classNames(TEXT, {}, [TypografyTheme.medium])}
+            >{`${error} - ингредиенты не найдены`}</p>
+          </div>
+
       ) : (
         <>
           <div className={classNames(cls.tabs, {}, ['mt-5', 'mb-10'])}>

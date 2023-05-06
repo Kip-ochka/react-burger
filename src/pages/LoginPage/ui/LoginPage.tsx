@@ -2,8 +2,8 @@ import {
     Button,
     Input,
 } from '@ya.praktikum/react-developer-burger-ui-components'
-import {FC, memo, useState} from 'react'
-import {Link, Navigate, useNavigate} from 'react-router-dom'
+import {FC, memo, useMemo, useState} from 'react'
+import {Link, Navigate, useLocation, useNavigate} from 'react-router-dom'
 import {PageLayout} from '../../../components/PageLayout/PageLayout'
 import {classNames} from '../../../utils/helpers/classNames'
 import {TEXT, TypografyTheme} from '../../../utils/variables'
@@ -23,9 +23,11 @@ const LoginPage:FC = memo(() => {
     const navigate = useNavigate()
     const dispatch = useAppDispatch()
     const {error, userLoading, isLogged} = useAppSelector((state) => state.user)
+    const location = useLocation();
+    const from = useMemo(()=>location.state?.from || '/', [location])
 
     if (isLogged) {
-        return <Navigate to={"/"} replace />
+        return <Navigate to={ from } />;
     }
     return (
         <PageLayout>

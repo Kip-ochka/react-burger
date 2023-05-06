@@ -1,19 +1,21 @@
 import {createAsyncThunk, createSlice} from '@reduxjs/toolkit'
 import {OrderSlice, OutcomingOrder} from '../types/orderTypes'
-import {BASE_URL} from '../utils/variables'
-import {getResponseData} from "../utils/helpers/checkResponse";
+import {request} from "../utils/helpers/checkResponse";
 
 export const fetchPostOrder = createAsyncThunk(
     'order/postOrder',
     async (orderData: { ingredients: string[] }, {rejectWithValue}) => {
-        const response = await fetch(`${BASE_URL}/orders`, {
-            method: 'POST',
-            headers: {
-                'Content-Type': 'application/json',
-            },
-            body: JSON.stringify(orderData),
-        })
-        return await getResponseData(response, rejectWithValue)
+        try {
+            return await request('/orders', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify(orderData),
+            })
+        } catch (e) {
+            rejectWithValue(e as string)
+        }
     }
 )
 
