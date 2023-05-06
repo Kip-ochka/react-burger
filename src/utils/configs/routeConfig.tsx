@@ -8,7 +8,7 @@ import {RegisterPage} from '../../pages/RegisterPage'
 import {ResetPasswordPage} from '../../pages/ResetPasswordPage'
 import {ProtectedRoute} from "../../hoc/ProtectedRoute";
 import {IngredientPage} from "../../pages/IngredientPage";
-import {ModalIngridient} from "../../components/ModalIngridient/ModalIngridient";
+import {IngredientDetails} from "../../components/IngredientDetails/IngredientDetails";
 
 export enum AppRoutes {
     MAIN = 'main',
@@ -62,7 +62,7 @@ export const routeConfig: Record<AppRoutes, RouteProps> = {
         path: RoutePath['ingredients-id'],
         element: (
             <IngredientPage>
-                <ModalIngridient />
+                <IngredientDetails />
             </IngredientPage>)
     },
     [AppRoutes.NOT_FOUND]: {

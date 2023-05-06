@@ -39,7 +39,7 @@ const LoginPage:FC = memo(() => {
                             dispatch(fetchLogin({email: values.email, password: values.password}))
                                 .then(res => {
                                     if (res.type === 'user/login/fulfilled') {
-                                        navigate('/')
+                                        navigate(-1)
                                         resetForm()
                                     }
                                     setTimeout(() => {

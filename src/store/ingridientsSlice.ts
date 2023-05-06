@@ -1,21 +1,17 @@
 import {createAsyncThunk, createSlice} from '@reduxjs/toolkit'
 import {IngridientsData, IngridientsSlice} from '../types/ingridientsTypes'
 import {BASE_URL} from '../utils/variables'
+import {getResponseData} from "../utils/helpers/checkResponse";
 
 export const fetchGetIngridients = createAsyncThunk<
     IngridientsData,
-    undefined,
-    { rejectValue: string }
->('ingridients/getIngridients', async (_, {rejectWithValue}) => {
+    void,
+    {rejectValue:string}
+>('ingridients/getIngridients', async (_,{rejectWithValue}) => {
     const response = await fetch(`${BASE_URL}/ingredients`, {
         method: 'GET',
     })
-    const data = await response.json()
-    if (response.ok) {
-        return data
-    } else {
-        return rejectWithValue(`${response.statusText}`)
-    }
+    return await getResponseData(response, rejectWithValue)
 })
 
 const ingredients = createSlice({
@@ -25,15 +21,11 @@ const ingredients = createSlice({
         error: null,
         ingredients: [],
         ingredientsToPage: null,
-        isWindowOpen: false,
     } as IngridientsSlice,
     reducers: {
         setIngredientsToPage: (state, action) => {
             state.ingredientsToPage = action.payload
         },
-        toggleWindowOpen: (state) => {
-            state.isWindowOpen = !state.isWindowOpen
-        }
     },
     extraReducers: (builder) => {
         builder
@@ -52,5 +44,5 @@ const ingredients = createSlice({
     },
 })
 
-export const {setIngredientsToPage, toggleWindowOpen} = ingredients.actions
+export const {setIngredientsToPage} = ingredients.actions
 export default ingredients.reducer

@@ -6,6 +6,8 @@ import {
     RegisteredResponse, ResetPasswordPayload, ResetPasswordResponse, SetUserPayload, SetUserResponse,
     UserState,
 } from '../types/userTypes'
+import {BASE_URL} from "../utils/variables";
+import {getResponseData} from "../utils/helpers/checkResponse";
 
 export const fetchRegister = createAsyncThunk<
     RegisteredResponse,
@@ -13,123 +15,88 @@ export const fetchRegister = createAsyncThunk<
     { rejectValue: string }
 >('user/register', async (payload, {rejectWithValue}) => {
     const response = await fetch(
-        'https://norma.nomoreparties.space/api/auth/register',
+        `${BASE_URL}/auth/register`,
         {
             method: 'POST',
             headers: {'Content-Type': 'application/json'},
             body: JSON.stringify(payload),
         }
     )
-    const data = await response.json()
-    if (data.success) {
-        return data
-    } else {
-        return rejectWithValue(data.message)
-    }
+    return await getResponseData(response, rejectWithValue)
 })
 
 export const fetchForgotPassword = createAsyncThunk<
     ForgotPasswordResponse, ForgotPasswordPayload, { rejectValue: string }
 >('user/forgotPassword', async (payload, {rejectWithValue}) => {
-    const response = await fetch('https://norma.nomoreparties.space/api/password-reset', {
+    const response = await fetch(`${BASE_URL}/password-reset`, {
         method: 'POST',
         headers: {'Content-Type': 'application/json'},
         body: JSON.stringify({email: payload.email})
     })
-    const data = await response.json()
-    if (data.success) {
-        return data
-    } else {
-        return rejectWithValue(data.message)
-    }
+    return await getResponseData(response, rejectWithValue)
 })
 
 export const fetchResetPassword = createAsyncThunk<
     ResetPasswordResponse, ResetPasswordPayload, { rejectValue: string }
 >('user/restorePassword', async (payload, {rejectWithValue}) => {
 
-    const response = await fetch(`https://norma.nomoreparties.space/api/password-reset/reset`, {
+    const response = await fetch(`${BASE_URL}/password-reset/reset`, {
         method: 'POST',
         headers: {'Content-Type': 'application/json'},
         body: JSON.stringify({password: payload.password, token: payload.code})
     })
-    const data = await response.json()
-    if (data.success) {
-        return data
-    } else {
-        return rejectWithValue(data.message)
-    }
+    return await getResponseData(response, rejectWithValue)
 })
 
 export const fetchLogin = createAsyncThunk<
     LoginResponse, LoginPayload, { rejectValue: string }
 >('user/login', async (payload, {rejectWithValue}) => {
-    const response = await fetch('https://norma.nomoreparties.space/api/auth/login', {
+    const response = await fetch(`${BASE_URL}/auth/login`, {
         method: 'POST',
         headers: {'Content-Type': 'application/json'},
         body: JSON.stringify({email: payload.email, password: payload.password})
     })
-    const data = await response.json()
-    if (data.success) {
-        return data
-    } else {
-        return rejectWithValue(data.message)
-    }
+    return await getResponseData(response, rejectWithValue)
 })
 
 export const fetchRefreshAccessToken = createAsyncThunk<
     RefreshAccessTokenResponse, void, { rejectValue: string }
 >('user/refreshAccessToken',
     async (_, {rejectWithValue}) => {
-        const response = await fetch('https://norma.nomoreparties.space/api/auth/token', {
+        const response = await fetch(`${BASE_URL}/auth/token`, {
             method: 'POST',
             headers: {'Content-Type': 'application/json'},
             body: JSON.stringify({token: localStorage.getItem('refresh')})
         })
-        const data = await response.json()
-        if (data.success) {
-            return data
-        } else {
-            return rejectWithValue(data.message)
-        }
+        return await getResponseData(response, rejectWithValue)
     })
 
 export const fetchLogout = createAsyncThunk<
-    LogoutResponse, void, { rejectValue: string }
+    LogoutResponse, void, {rejectValue:string}
 >('user/logout', async (_, {rejectWithValue}) => {
-    const response = await fetch('https://norma.nomoreparties.space/api/auth/logout', {
+    const response = await fetch(`${BASE_URL}/auth/logout`, {
         method: 'POST',
         headers: {'Content-Type': 'application/json'},
         body: JSON.stringify({token: localStorage.getItem('refresh')})
     })
-    const data = await response.json()
-    if (data.success) {
-        return data
-    } else {
-        return rejectWithValue(data.message)
-    }
+    return await getResponseData(response, rejectWithValue)
 })
 
 export const getUser = createAsyncThunk<
-    GetUserResponse, void, { rejectValue: string }
->('user/getUser', async (_, {rejectWithValue}) => {
-    const response = await fetch('https://norma.nomoreparties.space/api/auth/user', {
+    GetUserResponse, void, {rejectValue:string}
+>('user/getUser', async (_,{rejectWithValue}) => {
+    const response = await fetch(`${BASE_URL}/auth/user`, {
         method: 'GET',
         headers: {'Content-Type': 'application/json', Authorization: localStorage.getItem('access')!},
 
     })
-    const data = await response.json()
-    if (data.success) {
-        return data
-    } else {
-        return rejectWithValue(data.message)
-    }
+    return await getResponseData(response, rejectWithValue)
 })
 
 export const setUser = createAsyncThunk<
-    SetUserResponse, SetUserPayload, { rejectValue: string }
+    SetUserResponse, SetUserPayload, {rejectValue:string}
 >('user/setUser', async (payload, {rejectWithValue}) => {
-    const response = await fetch('https://norma.nomoreparties.space/api/auth/user', {
+    const response = await fetch(`${BASE_URL}/auth/user`, {
         method: 'PATCH',
         credentials: "same-origin",
         mode: "cors",
@@ -139,12 +106,7 @@ export const setUser = createAsyncThunk<
         headers: {'Content-Type': 'application/json', Authorization: localStorage.getItem('access')!},
         body: JSON.stringify(payload.data)
     })
-    const data = await response.json()
-    if (data.success) {
-        return data
-    } else {
-        return rejectWithValue(data.message)
-    }
+    return await getResponseData(response, rejectWithValue)
 })
 
 const userSlice = createSlice({
@@ -161,164 +123,166 @@ const userSlice = createSlice({
         }
     },
     extraReducers: (builder) => {
-        builder.addCase(fetchRegister.pending, (state) => {
-            state.error = null
-            state.userLoading = true
-        })
-        builder.addCase(fetchRegister.fulfilled, (state, action) => {
-            state.error = null
-            if (action.payload.user) {
-                state.user = action.payload.user
-            }
-            const refreshToken = action.payload.refreshToken
-            if (refreshToken) {
-                localStorage.setItem('refresh', refreshToken)
-            }
-            const accessToken = action.payload.accessToken
-            if (accessToken) {
-                localStorage.setItem('access', accessToken)
-            }
-            state.isLogged = true
-            state.userLoading = false
-        })
-        builder.addCase(fetchRegister.rejected, (state, action) => {
-            if (action.payload) {
-                state.error = action.payload
-            }
-            state.userLoading = false
-        })
-        builder.addCase(fetchForgotPassword.pending, (state) => {
-            state.error = null
-            state.userLoading = true
-        })
-        builder.addCase(fetchForgotPassword.fulfilled, (state) => {
-            state.error = null
-            state.userLoading = false
-        })
-        builder.addCase(fetchForgotPassword.rejected, (state, action) => {
-            if (action.payload) {
-                state.error = action.payload
-            }
-            state.userLoading = false
-        })
-        builder.addCase(fetchResetPassword.pending, (state) => {
-            state.error = null
-            state.userLoading = true
-        })
-        builder.addCase(fetchResetPassword.fulfilled, (state) => {
-            state.error = null
-            state.userLoading = false
-        })
-        builder.addCase(fetchResetPassword.rejected, (state, action) => {
-            if (action.payload) {
-                state.error = action.payload
-            }
-            state.userLoading = false
-        })
-        builder.addCase(fetchLogin.pending, (state) => {
-            state.error = null
-            state.userLoading = true
-        })
-        builder.addCase(fetchLogin.fulfilled, (state, action) => {
-            state.error = null
-            if (action.payload.user) {
-                state.user = action.payload.user
-            }
-            const refreshToken = action.payload.refreshToken
-            if (refreshToken) {
-                localStorage.setItem('refresh', refreshToken)
-            }
-            const accessToken = action.payload.accessToken
-            if (accessToken) {
-                localStorage.setItem('access', accessToken)
-            }
-            state.isLogged = true
-            state.userLoading = false
-        })
-        builder.addCase(fetchLogin.rejected, (state, action) => {
-            if (action.payload) {
-                state.error = action.payload
-            }
-            state.userLoading = false
-        })
-        builder.addCase(fetchRefreshAccessToken.pending, (state) => {
-            state.error = null
-            state.userLoading = true
-        })
-        builder.addCase(fetchRefreshAccessToken.fulfilled, (state, action) => {
-            state.error = null
-            const refreshToken = action.payload.refreshToken
-            if (refreshToken) {
-                localStorage.setItem('refresh', refreshToken)
-            }
-            const accessToken = action.payload.accessToken
-            if (accessToken) {
-                localStorage.setItem('access', accessToken)
-            }
-            state.isLogged = true
-            state.userLoading = false
-        })
-        builder.addCase(fetchRefreshAccessToken.rejected, (state, action) => {
-            if (action.payload) {
-                state.error = action.payload
-            }
-            state.userLoading = false
-        })
-        builder.addCase(fetchLogout.pending, (state) => {
-            state.error = null
-            state.userLoading = true
-        })
-        builder.addCase(fetchLogout.fulfilled, (state) => {
-            state.error = null
-            state.user.name = ''
-            state.user.email = ''
-            state.isLogged = false
-            localStorage.removeItem('refresh')
-            localStorage.removeItem('access')
-            state.userLoading = false
-        })
-        builder.addCase(fetchLogout.rejected, (state, action) => {
-            if (action.payload) {
-                state.error = action.payload
-            }
-            state.userLoading = false
-        })
-        builder.addCase(getUser.pending, (state) => {
-            state.error = null
-            state.userLoading = true
-        })
-        builder.addCase(getUser.fulfilled, (state, action) => {
-            state.error = null
-            if (action.payload.user) {
-                state.user = action.payload.user
-            }
-            state.isLogged = true
-            state.userLoading = false
-        })
-        builder.addCase(getUser.rejected, (state, action) => {
-            if (action.payload) {
-                state.error = action.payload
-            }
-            state.userLoading = false
-        })
-        builder.addCase(setUser.pending, (state) => {
-            state.error = null
-            state.userLoading = true
-        })
-        builder.addCase(setUser.fulfilled, (state, action) => {
-            state.error = null
-            if (action.payload.user) {
-                state.user = action.payload.user
-            }
-            state.isLogged = true
-            state.userLoading = false
-        })
-        builder.addCase(setUser.rejected, (state, action) => {
-            if (action.payload) {
-                state.error = action.payload
-            }
-            state.userLoading = false
-        })
+        builder
+            .addCase(fetchRegister.pending, (state) => {
+                state.error = null
+                state.userLoading = true
+            })
+            .addCase(fetchRegister.fulfilled, (state, action) => {
+                state.error = null
+                if (action.payload.user) {
+                    state.user = action.payload.user
+                }
+                const refreshToken = action.payload.refreshToken
+                if (refreshToken) {
+                    localStorage.setItem('refresh', refreshToken)
+                }
+                const accessToken = action.payload.accessToken
+                if (accessToken) {
+                    localStorage.setItem('access', accessToken)
+                }
+                state.isLogged = true
+                state.userLoading = false
+            })
+            .addCase(fetchRegister.rejected, (state, action) => {
+                if (action.payload) {
+                    state.error = `Регистрация прошла с ошибкой, регистрация не выполнена. Причина: 
+                    ${action.payload}`
+                }
+                state.userLoading = false
+            })
+            .addCase(fetchForgotPassword.pending, (state) => {
+                state.error = null
+                state.userLoading = true
+            })
+            .addCase(fetchForgotPassword.fulfilled, (state) => {
+                state.error = null
+                state.userLoading = false
+            })
+            .addCase(fetchForgotPassword.rejected, (state, action) => {
+                if (action.payload) {
+                    state.error = action.payload
+                }
+                state.userLoading = false
+            })
+            .addCase(fetchResetPassword.pending, (state) => {
+                state.error = null
+                state.userLoading = true
+            })
+            .addCase(fetchResetPassword.fulfilled, (state) => {
+                state.error = null
+                state.userLoading = false
+            })
+            .addCase(fetchResetPassword.rejected, (state, action) => {
+                if (action.payload) {
+                    state.error = action.payload
+                }
+                state.userLoading = false
+            })
+            .addCase(fetchLogin.pending, (state) => {
+                state.error = null
+                state.userLoading = true
+            })
+            .addCase(fetchLogin.fulfilled, (state, action) => {
+                state.error = null
+                if (action.payload.user) {
+                    state.user = action.payload.user
+                }
+                const refreshToken = action.payload.refreshToken
+                if (refreshToken) {
+                    localStorage.setItem('refresh', refreshToken)
+                }
+                const accessToken = action.payload.accessToken
+                if (accessToken) {
+                    localStorage.setItem('access', accessToken)
+                }
+                state.isLogged = true
+                state.userLoading = false
+            })
+            .addCase(fetchLogin.rejected, (state, action) => {
+                if (action.payload) {
+                    state.error = action.payload
+                }
+                state.userLoading = false
+            })
+            .addCase(fetchRefreshAccessToken.pending, (state) => {
+                state.error = null
+                state.userLoading = true
+            })
+            .addCase(fetchRefreshAccessToken.fulfilled, (state, action) => {
+                state.error = null
+                const refreshToken = action.payload.refreshToken
+                if (refreshToken) {
+                    localStorage.setItem('refresh', refreshToken)
+                }
+                const accessToken = action.payload.accessToken
+                if (accessToken) {
+                    localStorage.setItem('access', accessToken)
+                }
+                state.isLogged = true
+                state.userLoading = false
+            })
+            .addCase(fetchRefreshAccessToken.rejected, (state, action) => {
+                if (action.payload) {
+                    state.error = action.payload
+                }
+                state.userLoading = false
+            })
+            .addCase(fetchLogout.pending, (state) => {
+                state.error = null
+                state.userLoading = true
+            })
+            .addCase(fetchLogout.fulfilled, (state) => {
+                state.error = null
+                state.user.name = ''
+                state.user.email = ''
+                state.isLogged = false
+                localStorage.removeItem('refresh')
+                localStorage.removeItem('access')
+                state.userLoading = false
+            })
+            .addCase(fetchLogout.rejected, (state, action) => {
+                if (action.payload) {
+                    state.error = action.payload
+                }
+                state.userLoading = false
+            })
+            .addCase(getUser.pending, (state) => {
+                state.error = null
+                state.userLoading = true
+            })
+            .addCase(getUser.fulfilled, (state, action) => {
+                state.error = null
+                if (action.payload.user) {
+                    state.user = action.payload.user
+                }
+                state.isLogged = true
+                state.userLoading = false
+            })
+            .addCase(getUser.rejected, (state, action) => {
+                if (action.payload) {
+                    state.error = action.payload
+                }
+                state.userLoading = false
+            })
+            .addCase(setUser.pending, (state) => {
+                state.error = null
+                state.userLoading = true
+            })
+            .addCase(setUser.fulfilled, (state, action) => {
+                state.error = null
+                if (action.payload.user) {
+                    state.user = action.payload.user
+                }
+                state.isLogged = true
+                state.userLoading = false
+            })
+            .addCase(setUser.rejected, (state, action) => {
+                if (action.payload) {
+                    state.error = action.payload
+                }
+                state.userLoading = false
+            })
 
     },
 })

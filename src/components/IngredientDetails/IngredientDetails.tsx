@@ -1,13 +1,13 @@
 import {FC, useEffect} from 'react'
 import {classNames} from '../../utils/helpers/classNames'
 import {TEXT, TypografyTheme} from '../../utils/variables'
-import cls from './ModalIngridient.module.css'
+import cls from './IngredientDetails.module.css'
 import {useAppDispatch, useAppSelector} from "../../utils/hooks/reduxTypedHooks";
 import Preloader from "../Preloader/Preloader";
 import {useParams} from "react-router-dom";
 import {setIngredientsToPage} from "../../store/ingridientsSlice";
 
-export const ModalIngridient: FC = () => {
+export const IngredientDetails: FC = () => {
     const {ingredientsToPage, ingredients} = useAppSelector(state => state.ingridients)
     const dispatch = useAppDispatch()
     const { id } = useParams()

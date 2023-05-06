@@ -19,13 +19,15 @@ export const App: FC = () => {
     useEffect(() => {
         dispatch(fetchGetIngridients())
         dispatch(getUser()).then((res) => {
-            dispatch(setError(null))
-            if (res.payload === 'jwt expired' && localStorage.getItem('refresh')) {
+            if ((res.payload=== 'You should be authorised'||res.payload==='jwt expired')&&localStorage.getItem('refresh')) {
                 dispatch(fetchRefreshAccessToken()).then(res => {
+                    dispatch(getUser())
                     if (res.type === 'user/refreshToken/rejected') {
                         dispatch(setError(null))
                     }
                 })
+            } else {
+                dispatch(setError(null))
             }
         })
     }, [dispatch])

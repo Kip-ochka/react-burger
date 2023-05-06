@@ -6,12 +6,10 @@ import {useFormAndValidation} from "../../utils/hooks/useFormAndValidation";
 import {useAppDispatch, useAppSelector} from "../../utils/hooks/reduxTypedHooks";
 import {fetchRefreshAccessToken, setError, setUser} from "../../store/userSlice";
 import ErrorMessage from "../ErrorMessage/ErrorMessage";
-import {useNavigate} from "react-router-dom";
 
 export const ProfileInputs: FC = () => {
     const {user, error} = useAppSelector((state) => state.user)
     const dispatch = useAppDispatch()
-    const navigate = useNavigate()
     const {name, email} = user
     const {values, isValid, setIsValid, setValues, handleChange, errors} = useFormAndValidation({
         name: name,
@@ -53,25 +51,29 @@ export const ProfileInputs: FC = () => {
 
         if (!isValid[inputName]) {
             dispatch(setUser({data: {[inputName]: values[inputName]}})).then(res => {
+                if ((res.payload=== 'You should be authorised'||res.payload==='jwt expired')&&localStorage.getItem('refresh')) {
+                    dispatch(fetchRefreshAccessToken()).then(res => {
+                        dispatch(setUser({data: {[inputName]: values[inputName]}}))
+                        if (res.type === 'user/refreshToken/rejected') {
+                            dispatch(setError(null))
+                        } else {
+
+                        }
+                        return
+                    })
+                }
                 if (res.type !== 'user/setUser/fulfilled') {
                     setTimeout(() => {
                         dispatch(setError(null))
                     }, 2000)
+                    return
                 }
-                if (res.payload === 'jwt expired' && localStorage.getItem('refresh')) {
-                    dispatch(fetchRefreshAccessToken()).then(res => {
-                        if (res.type === 'user/refreshToken/rejected') {
-                            dispatch(setError(null))
-                        }
-                    })
-                } else {
-                    navigate('/login')
-                }
+
             })
             return
         }
         dispatch(setError(`Поле ${inputName} некорректно`))
-    }, [user, dispatch, email, isValid, name, navigate, setIsValid, setValues, values])
+    }, [user, dispatch, email, isValid, name, setIsValid, setValues, values])
 
     useEffect(() => {
         setValues({name: name, email: email, password: '******'})

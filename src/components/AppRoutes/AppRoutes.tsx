@@ -3,10 +3,10 @@ import {Route, Routes, useLocation, useNavigate} from 'react-router-dom'
 import {routeConfig} from '../../utils/configs/routeConfig'
 import {PageLayout} from '../PageLayout/PageLayout'
 import Preloader from '../Preloader/Preloader'
-import {useAppDispatch, useAppSelector} from "../../utils/hooks/reduxTypedHooks";
-import {setIngredientsToPage, toggleWindowOpen} from "../../store/ingridientsSlice";
+import {useAppDispatch} from "../../utils/hooks/reduxTypedHooks";
+import {setIngredientsToPage} from "../../store/ingridientsSlice";
 import {Modal} from "../Modal/Modal";
-import {ModalIngridient} from "../ModalIngridient/ModalIngridient";
+import {IngredientDetails} from "../IngredientDetails/IngredientDetails";
 
 const AppRoutes: FC = () => {
     const location = useLocation();
@@ -14,11 +14,8 @@ const AppRoutes: FC = () => {
     const dispatch = useAppDispatch()
     const navigate = useNavigate()
 
-    const {isWindowOpen} = useAppSelector(state=>state.ingridients)
-
     const handleClose = useCallback(() => {
         dispatch(setIngredientsToPage(null))
-        dispatch(toggleWindowOpen())
         navigate(-1)
     }, [dispatch, navigate])
 
@@ -44,8 +41,8 @@ const AppRoutes: FC = () => {
                     <Route
                         path="/ingredients/:id"
                         element={
-                            <Modal isOpen={isWindowOpen} onClose={handleClose} title={"Детали ингредиента"}>
-                                <ModalIngridient />
+                            <Modal onClose={handleClose} title={"Детали ингредиента"}>
+                                <IngredientDetails />
                             </Modal>
                         }
                     />

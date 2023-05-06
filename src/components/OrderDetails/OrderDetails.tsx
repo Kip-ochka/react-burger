@@ -1,11 +1,11 @@
 import {classNames} from '../../utils/helpers/classNames'
 import {TEXT, TypografyTheme} from '../../utils/variables'
 import {ReactComponent as Done} from '../../images/icons/graphics.svg'
-import cls from './ModalOrder.module.css'
+import cls from './OrderDetails.module.css'
 import {useAppSelector} from '../../utils/hooks/reduxTypedHooks'
 import {FC} from 'react'
 
-export const ModalOrder: FC = () => {
+export const OrderDetails: FC = () => {
     const {order} = useAppSelector((state) => state.order)
     return (
         <>

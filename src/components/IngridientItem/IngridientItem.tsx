@@ -10,7 +10,7 @@ import {useAppDispatch, useAppSelector} from '../../utils/hooks/reduxTypedHooks'
 import {TEXT, TypografyTheme} from '../../utils/variables'
 import cls from './IngridientItem.module.css'
 import {Link, useLocation} from "react-router-dom";
-import {setIngredientsToPage, toggleWindowOpen} from "../../store/ingridientsSlice";
+import {setIngredientsToPage} from "../../store/ingridientsSlice";
 
 interface IngridientItemProps {
     ingridient: Ingridient
@@ -21,9 +21,6 @@ export const IngridientItem: FC<IngridientItemProps> = (props) => {
     const dispatch = useAppDispatch()
     const handleOpenInfo = (data: Ingridient) => {
         dispatch(setIngredientsToPage(data))
-        setTimeout(() => {
-            dispatch(toggleWindowOpen())
-        }, 100)
     }
     const {inConstructor} = useAppSelector((state) => state.burgerConstructor)
     const location = useLocation()

@@ -4,7 +4,7 @@ import {HTML5Backend} from 'react-dnd-html5-backend'
 import {BurgerConstructor} from '../../../components/BurgerConstructor/BurgerConstructor'
 import {BurgerIngredients} from '../../../components/BurgerIngredients/BurgerIngredients'
 import {Modal} from '../../../components/Modal/Modal'
-import {ModalOrder} from '../../../components/ModalOrder/ModalOrder'
+import {OrderDetails} from '../../../components/OrderDetails/OrderDetails'
 import {classNames} from '../../../utils/helpers/classNames'
 import cls from './ConstructorPage.module.css'
 
@@ -33,7 +33,7 @@ const ConstructorPage: FC<ConstructorPageProps> = memo(() => {
             <Modal
                 isOpen={isOpenOrder}
                 onClose={handleClose}
-                children={<ModalOrder/>}
+                children={<OrderDetails/>}
             />
         </main>
     )
