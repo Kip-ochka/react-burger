@@ -1,17 +1,14 @@
 import {createAsyncThunk, createSlice} from '@reduxjs/toolkit'
 import {
-    ForgotPasswordPayload,
-    ForgotPasswordResponse, GetUserResponse, LoginPayload, LoginResponse, LogoutResponse, RefreshAccessTokenResponse,
-    RegisteredPayload,
-    RegisteredResponse, ResetPasswordPayload, ResetPasswordResponse, SetUserPayload, SetUserResponse,
-    UserState,
+    ForgotPasswordPayload, ForgotPasswordResponse, GetUserResponse, LoginPayload,
+    LoginResponse, LogoutResponse, RefreshAccessTokenResponse, RegisteredPayload,
+    RegisteredResponse, ResetPasswordPayload, ResetPasswordResponse, SetUserPayload,
+    SetUserResponse, UserState,
 } from '../types/userTypes'
 import {request} from "../utils/helpers/checkResponse";
 
 export const fetchRegister = createAsyncThunk<
-    RegisteredResponse,
-    RegisteredPayload,
-    { rejectValue: string }
+    RegisteredResponse, RegisteredPayload, { rejectValue: string }
 >('user/register', async (payload, {rejectWithValue}) => {
     try {
         return await request('/auth/register', {
