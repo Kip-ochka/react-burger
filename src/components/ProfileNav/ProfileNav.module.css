@@ -1,0 +1,23 @@
+.link {
+  text-decoration: none;
+  color: inherit;
+  display: flex;
+  width: 320px;
+  height: 64px;
+  display: flex;
+  align-items: center;
+}
+.exit {
+  width: 320px;
+  height: 64px;
+  display: flex;
+  align-items: center;
+  background-color: transparent;
+  border: none;
+  cursor: pointer;
+}
+
+.section {
+  display: flex;
+  flex-direction: column;
+}

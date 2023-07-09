@@ -69,7 +69,7 @@ export const AppHeader: FC = React.memo(() => {
         <Logo />
 
         <NavLink
-          to="/cabinet"
+          to="/profile"
           className={classNames(cls.navLink, {}, [
             'pl-5',
             'pr-5',
