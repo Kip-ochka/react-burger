@@ -1,11 +1,3 @@
-export const getResponseData = async (fetchResponse: Response, rejectWithValue: any) => {
-    if (!fetchResponse.ok) {
-        const err = await fetchResponse.json();
-        return Promise.reject(rejectWithValue(err));
-    }
-    return fetchResponse.json();
-}
-
 export const BASE_URL = "https://norma.nomoreparties.space/api";
 
 const checkResponse = (res: Response) => {
@@ -15,7 +7,7 @@ const checkResponse = (res: Response) => {
     return Promise.reject(`Ошибка ${res.status}`);
 };
 
-const checkSuccess = (res: any) => {
+const checkSuccess = <T>(res: T & {success:boolean}) => {
     if (res && res.success) {
         return res;
     }
