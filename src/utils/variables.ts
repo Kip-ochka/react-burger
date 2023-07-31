@@ -1,4 +1,5 @@
 const BASE_URL = `https://norma.nomoreparties.space/api`
+export const WS_URL = 'wss://norma.nomoreparties.space/';
 const INACTIVE_COLOR = `text_color_inactive`
 const TEXT = 'text'
 const INGRIDIENT_TYPES = [

@@ -1,18 +1,36 @@
-import {FC, memo} from 'react'
+import {FC, memo, useEffect} from 'react'
 import {TEXT} from 'react-dnd-html5-backend/dist/NativeTypes'
-import {Route, Routes} from 'react-router-dom'
+import {Route, Routes, useLocation} from 'react-router-dom'
 import {ProfileInputs} from '../../../components/ProfileInputs/ProfileInputs'
 import {ProfileNav} from '../../../components/ProfileNav/ProfileNav'
 import {classNames} from '../../../utils/helpers/classNames'
-import {INACTIVE_COLOR, TypografyTheme} from '../../../utils/variables'
+import {INACTIVE_COLOR, TypografyTheme, WS_URL} from '../../../utils/variables'
 import cls from './ProfilePage.module.css'
-import {useAppSelector} from "../../../utils/hooks/reduxTypedHooks";
+import {useAppDispatch, useAppSelector} from "../../../utils/hooks/reduxTypedHooks";
 import Preloader from "../../../components/Preloader/Preloader";
+import OrderList from "../../../components/OrderList/OrderList";
+import {websocketDisconnecting, websocketStartConnecting} from "../../../store/socketSlice";
+import {clearOrders} from "../../../store/orderSlice";
 
 const ProfilePage: FC = memo(() => {
     const {userLoading} = useAppSelector(state => state.user)
+    const {pathname} = useLocation();
+    const dispatch = useAppDispatch();
+
+    useEffect(() => {
+        if(pathname.includes('/orders')){
+            const token = localStorage.getItem('access')!.split(' ')[1]
+            console.log('connecting')
+            dispatch(websocketStartConnecting(`${WS_URL}orders?token=${token}`));
+        }
+        return () => {
+            dispatch(clearOrders());
+            dispatch(websocketDisconnecting());
+        }
+    }, [dispatch, pathname]);
+
     return (
-        <main className={classNames(cls.page)}>
+        <section className={classNames(cls.page)}>
             {userLoading
                 ? <Preloader/>
                 : (<div className={classNames(cls.wrapper)}>
@@ -49,11 +67,11 @@ const ProfilePage: FC = memo(() => {
                     </div>
                     <Routes>
                         <Route path="/" element={<ProfileInputs/>}/>
-                        <Route path="/orders" element={<div>orders</div>}/>
+                        <Route path="/orders" element={<OrderList/>}/>
                     </Routes>
                 </div>)}
 
-        </main>
+        </section>
     )
 })
 

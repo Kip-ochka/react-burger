@@ -1,0 +1,17 @@
+.feedSection {
+    height: calc(100vh - 88px);
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+}
+.h1 {
+   text-align: left;
+    width: 100%;
+}
+
+.feed {
+    display: grid;
+    grid-template-columns: 600px 580px;
+    gap: 60px;
+}

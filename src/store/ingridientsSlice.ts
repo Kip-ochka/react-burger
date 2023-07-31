@@ -39,7 +39,6 @@ const ingredients = createSlice({
             })
             .addCase(fetchGetIngridients.rejected, (state, action) => {
                 state.loading = false
-                console.log(action)
                 state.error = action.payload
             })
     },

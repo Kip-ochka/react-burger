@@ -1,0 +1,74 @@
+.li {
+    list-style: none;
+    display: flex;
+    width: 584px;
+    padding: 24px;
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 24px;
+    border-radius: 40px;
+    background: #1C1C21;
+    box-shadow: 0 0 1px 0 rgba(0, 0, 0, 0.04), 0 0 2px 0 rgba(0, 0, 0, 0.06), 0 4px 8px 0 rgba(0, 0, 0, 0.04);
+}
+
+.top {
+    display: flex;
+    justify-content: space-between;
+    width: 100%;
+}
+
+.ul {
+    display: flex;
+    align-items: center;
+    list-style: none;
+    width: 100%;
+}
+
+.ingredient {
+    margin-right: -16px;
+    width: 64px;
+    height: 64px;
+    position: relative;
+    border-radius: 100px;
+    border: 3px solid transparent;
+    box-sizing: border-box;
+    background: linear-gradient(#1c1c21, #1c1c21) content-box,
+    linear-gradient(#4c4cff, #801ab2) border-box;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.ingredientImage {
+    height: 56px;
+}
+
+.count {
+    position: absolute;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    width: 60px;
+    height: 60px;
+    border-radius: 50%;
+    background-color: rgba(0, 0, 0, .7);
+}
+
+.priceWrapper {
+    justify-self: flex-end;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+    margin-left: auto;
+}
+
+.link {
+    all: unset;
+    cursor: pointer;
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 24px;
+    width: 100%;
+}

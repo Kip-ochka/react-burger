@@ -1,5 +1,5 @@
-import {createAsyncThunk, createSlice} from '@reduxjs/toolkit'
-import {OrderSlice, OutcomingOrder} from '../types/orderTypes'
+import {createAsyncThunk, createSlice, PayloadAction} from '@reduxjs/toolkit'
+import {OrderListResponse, OrderSlice, OutcomingOrder} from '../types/orderTypes'
 import {request} from "../utils/helpers/checkResponse";
 
 export const fetchPostOrder = createAsyncThunk(
@@ -25,6 +25,9 @@ const orderSlice = createSlice({
         orderLoading: false,
         orderError: null,
         order: {} as OutcomingOrder,
+        orders: [],
+        total: null,
+        totalToday: null,
     } as OrderSlice,
     reducers: {
         cleanError: (state) => {
@@ -33,6 +36,16 @@ const orderSlice = createSlice({
         setError: (state, action) => {
             state.orderError = action.payload
         },
+        clearOrders: (state) => {
+            state.orders = [];
+            state.total = null;
+            state.totalToday = null;
+        },
+        setOrders: (state, action: PayloadAction<OrderListResponse>) => {
+            state.orders = action.payload.orders.reverse();
+            state.total = action.payload.total;
+            state.totalToday = action.payload.totalToday;
+        }
     },
     extraReducers: (builder) => {
         builder
@@ -50,5 +63,5 @@ const orderSlice = createSlice({
             })
     },
 })
-export const {cleanError, setError} = orderSlice.actions
+export const {cleanError, setError, clearOrders,setOrders} = orderSlice.actions
 export default orderSlice.reducer

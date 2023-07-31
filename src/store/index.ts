@@ -3,6 +3,24 @@ import burgerConstructorSlice from './burgerConstructorSlice'
 import ingridientsSlice from './ingridientsSlice'
 import orderSlice from './orderSlice'
 import userSlice from './userSlice'
+import socketSlice from "./socketSlice";
+import {TWSActions} from "../types/socket";
+import {
+  websocketStartConnecting,
+  websocketConnecting,
+  websocketDisconnecting,
+  webSocketError
+} from './socketSlice';
+import {createSocketMiddleware} from "./middlewares/socketMiddleware";
+
+const wsActions: TWSActions = {
+  websocketStartConnecting,
+  websocketConnecting,
+  websocketDisconnecting,
+  webSocketError
+}
+
+const socketMiddleware = createSocketMiddleware(wsActions);
 
 const store = configureStore({
   reducer: {
@@ -10,7 +28,9 @@ const store = configureStore({
     burgerConstructor: burgerConstructorSlice,
     order: orderSlice,
     user: userSlice,
+    socket:socketSlice,
   },
+  middleware: getDefaultMiddleware => getDefaultMiddleware().concat(socketMiddleware)
 })
 
 export default store

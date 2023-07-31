@@ -7,10 +7,12 @@ import {useAppDispatch} from "../../utils/hooks/reduxTypedHooks";
 import {setIngredientsToPage} from "../../store/ingridientsSlice";
 import {Modal} from "../Modal/Modal";
 import {IngredientDetails} from "../IngredientDetails/IngredientDetails";
+import OrderDetailsInfo from "../OrderDetailsInfo/OrderDetailsInfo";
 
 const AppRoutes: FC = () => {
     const location = useLocation();
-    const background = useMemo(()=>location.state && location.state.background, [location.state])
+    const background = useMemo(() => location.state && location.state.background, [location.state])
+    const orderNumber = useMemo(() => location.state && location.state.orderNumber, [location.state])
     const dispatch = useAppDispatch()
     const navigate = useNavigate()
 
@@ -18,6 +20,10 @@ const AppRoutes: FC = () => {
         dispatch(setIngredientsToPage(null))
         navigate(-1)
     }, [dispatch, navigate])
+
+    const handleCloseOrder = useCallback(() => {
+        navigate(-1)
+    }, [ navigate])
 
     return (
         <Suspense
@@ -28,13 +34,15 @@ const AppRoutes: FC = () => {
             }
         >
             <Routes location={background || location}>
-                {Object.values(routeConfig).map(({element, path}) => (
-                    <Route
-                        key={path}
-                        path={path}
-                        element={<PageLayout>{element}</PageLayout>}
-                    />
-                ))}
+                {Object.values(routeConfig).map(({element, path}) => {
+                    return (
+                        <Route
+                            key={path}
+                            path={path}
+                            element={<PageLayout>{element}</PageLayout>}
+                        />
+                    )
+                })}
             </Routes>
             {background && (
                 <Routes>
@@ -43,6 +51,22 @@ const AppRoutes: FC = () => {
                         element={
                             <Modal onClose={handleClose} title={"Детали ингредиента"}>
                                 <IngredientDetails />
+                            </Modal>
+                        }
+                    />
+                    <Route
+                        path="/feed/:id"
+                        element={
+                            <Modal onClose={handleCloseOrder} title={`#${orderNumber}` || ''}>
+                                <OrderDetailsInfo withoutHeader/>
+                            </Modal>
+                        }
+                    />
+                    <Route
+                        path="/profile/orders/:id"
+                        element={
+                            <Modal onClose={handleCloseOrder} title={`#${orderNumber}` || ''}>
+                                <OrderDetailsInfo withoutHeader/>
                             </Modal>
                         }
                     />
