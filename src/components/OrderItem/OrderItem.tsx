@@ -30,7 +30,6 @@ const OrderItem: FC<OrderItemInterface> = ({order, withStatus}) => {
                     resultData.totalPrice = resultData.totalPrice + ingredient.price
                     resultData.orderIngredients.push(ingredient)
                 }
-
             })
             return resultData
         }, [ingredients, order.ingredients])
@@ -47,6 +46,7 @@ const OrderItem: FC<OrderItemInterface> = ({order, withStatus}) => {
             ? 'Выполнен' : order.status === 'pending'
                 ? 'Готовится' : order.status === 'created'
                     ? 'Создан' : ''
+
         return (
             <li className={cls.li}>
                 <Link

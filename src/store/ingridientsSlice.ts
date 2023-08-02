@@ -4,14 +4,9 @@ import {request} from "../utils/helpers/checkResponse";
 
 export const fetchGetIngridients = createAsyncThunk<
     IngridientsData,
-    void,
-    {rejectValue:string}
->('ingridients/getIngridients', async (_,{rejectWithValue}) => {
-    try{
+    void
+>('ingridients/getIngridients', async () => {
        return await request(`/ingredients`)
-    }catch (e) {
-       return rejectWithValue(e as string)
-    }
 })
 
 const ingredients = createSlice({
@@ -39,7 +34,7 @@ const ingredients = createSlice({
             })
             .addCase(fetchGetIngridients.rejected, (state, action) => {
                 state.loading = false
-                state.error = action.payload
+                state.error = action.error.message
             })
     },
 })

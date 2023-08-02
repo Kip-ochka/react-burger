@@ -8,108 +8,82 @@ import {
 import {request} from "../utils/helpers/checkResponse";
 
 export const fetchRegister = createAsyncThunk<
-    RegisteredResponse, RegisteredPayload, { rejectValue: string }
->('user/register', async (payload, {rejectWithValue}) => {
-    try {
-        return await request('/auth/register', {
-            method: 'POST',
-            headers: {'Content-Type': 'application/json'},
-            body: JSON.stringify(payload),
-        })
-    } catch (e) {
-        return rejectWithValue(e as string)
-    }
+    RegisteredResponse, RegisteredPayload
+>('user/register', async (payload) => {
+    return await request('/auth/register', {
+        method: 'POST',
+        headers: {'Content-Type': 'application/json'},
+        body: JSON.stringify(payload),
+    })
+
 })
 
 export const fetchForgotPassword = createAsyncThunk<
-    ForgotPasswordResponse, ForgotPasswordPayload, { rejectValue: string }
->('user/forgotPassword', async (payload, {rejectWithValue}) => {
-    try {
+    ForgotPasswordResponse, ForgotPasswordPayload
+>('user/forgotPassword', async (payload) => {
         return await request('/password-reset', {
             method: 'POST',
             headers: {'Content-Type': 'application/json'},
             body: JSON.stringify({email: payload.email})
         })
-    } catch (e) {
-        return rejectWithValue(e as string)
-    }
 })
 
 export const fetchResetPassword = createAsyncThunk<
-    ResetPasswordResponse, ResetPasswordPayload, { rejectValue: string }
->('user/restorePassword', async (payload, {rejectWithValue}) => {
-    try {
+    ResetPasswordResponse, ResetPasswordPayload
+>('user/restorePassword', async (payload) => {
         return await request('/password-reset/reset', {
             method: 'POST',
             headers: {'Content-Type': 'application/json'},
             body: JSON.stringify({password: payload.password, token: payload.code})
         })
-    } catch (e) {
-        return rejectWithValue(e as string)
-    }
 })
 
 export const fetchLogin = createAsyncThunk<
-    LoginResponse, LoginPayload, { rejectValue: string }
->('user/login', async (payload, {rejectWithValue}) => {
-    try {
+    LoginResponse, LoginPayload
+>('user/login', async (payload) => {
         return await request('/auth/login', {
             method: 'POST',
             headers: {'Content-Type': 'application/json'},
             body: JSON.stringify({email: payload.email, password: payload.password})
         })
-    } catch (e) {
-        return rejectWithValue(e as string)
-    }
 })
 
 export const fetchRefreshAccessToken = createAsyncThunk<
-    RefreshAccessTokenResponse, void, { rejectValue: string }
+    RefreshAccessTokenResponse, void
 >('user/refreshAccessToken',
-    async (_, {rejectWithValue}) => {
-        try {
+    async () => {
             return await request('/auth/token', {
                 method: 'POST',
                 headers: {'Content-Type': 'application/json'},
                 body: JSON.stringify({token: localStorage.getItem('refresh')})
             })
-        } catch (e) {
-            return rejectWithValue(e as string)
-        }
     })
 
 export const fetchLogout = createAsyncThunk<
-    LogoutResponse, void, { rejectValue: string }
->('user/logout', async (_, {rejectWithValue}) => {
-    try {
+    LogoutResponse, void
+>('user/logout', async () => {
+
         return await request('/auth/logout', {
             method: 'POST',
             headers: {'Content-Type': 'application/json'},
             body: JSON.stringify({token: localStorage.getItem('refresh')})
         })
-    } catch (e) {
-        return rejectWithValue(e as string)
-    }
+
 })
 
 export const getUser = createAsyncThunk<
-    GetUserResponse, void, { rejectValue: string }
->('user/getUser', async (_, {rejectWithValue}) => {
-    try {
+    GetUserResponse, void
+>('user/getUser', async () => {
         return await request('/auth/user', {
             method: 'GET',
             headers: {'Content-Type': 'application/json', Authorization: localStorage.getItem('access')!},
 
         })
-    } catch (e) {
-        return rejectWithValue(e as string)
-    }
 })
 
 export const setUser = createAsyncThunk<
-    SetUserResponse, SetUserPayload, { rejectValue: string }
->('user/setUser', async (payload, {rejectWithValue}) => {
-    try {
+    SetUserResponse, SetUserPayload
+>('user/setUser', async (payload) => {
         return await request('/auth/user', {
             method: 'PATCH',
             credentials: "same-origin",
@@ -120,9 +94,6 @@ export const setUser = createAsyncThunk<
             headers: {'Content-Type': 'application/json', Authorization: localStorage.getItem('access')!},
             body: JSON.stringify(payload.data)
         })
-    } catch (e) {
-        return rejectWithValue(e as string)
-    }
 })
 
 const userSlice = createSlice({
@@ -176,8 +147,8 @@ const userSlice = createSlice({
                 state.userLoading = false
             })
             .addCase(fetchForgotPassword.rejected, (state, action) => {
-                if (action.payload) {
-                    state.error = action.payload
+                if (action.error) {
+                    state.error = action.error.message
                 }
                 state.userLoading = false
             })
@@ -190,8 +161,8 @@ const userSlice = createSlice({
                 state.userLoading = false
             })
             .addCase(fetchResetPassword.rejected, (state, action) => {
-                if (action.payload) {
-                    state.error = action.payload
+                if (action.error) {
+                    state.error = action.error.message
                 }
                 state.userLoading = false
             })
@@ -216,8 +187,8 @@ const userSlice = createSlice({
                 state.userLoading = false
             })
             .addCase(fetchLogin.rejected, (state, action) => {
-                if (action.payload) {
-                    state.error = action.payload
+                if (action.error) {
+                    state.error = action.error.message
                 }
                 state.userLoading = false
             })
@@ -239,8 +210,8 @@ const userSlice = createSlice({
                 state.userLoading = false
             })
             .addCase(fetchRefreshAccessToken.rejected, (state, action) => {
-                if (action.payload) {
-                    state.error = action.payload
+                if (action.error) {
+                    state.error = action.error.message
                 }
                 state.userLoading = false
             })
@@ -258,8 +229,8 @@ const userSlice = createSlice({
                 state.userLoading = false
             })
             .addCase(fetchLogout.rejected, (state, action) => {
-                if (action.payload) {
-                    state.error = action.payload
+                if (action.error) {
+                    state.error = action.error.message
                 }
                 state.userLoading = false
             })
@@ -276,8 +247,8 @@ const userSlice = createSlice({
                 state.userLoading = false
             })
             .addCase(getUser.rejected, (state, action) => {
-                if (action.payload) {
-                    state.error = action.payload
+                if (action.error) {
+                    state.error = action.error.message
                 }
                 state.userLoading = false
             })
@@ -294,8 +265,8 @@ const userSlice = createSlice({
                 state.userLoading = false
             })
             .addCase(setUser.rejected, (state, action) => {
-                if (action.payload) {
-                    state.error = action.payload
+                if (action.error) {
+                    state.error = action.error.message
                 }
                 state.userLoading = false
             })

@@ -2,7 +2,6 @@ import { Middleware, MiddlewareAPI } from '@reduxjs/toolkit';
 import { OrderListResponse} from '../../types/orderTypes'
 import { AppDispatch, RootState } from '../index';
 import {TWSActions} from "../../types/socket";
-import {setOrders} from "../orderSlice";
 import {fetchRefreshAccessToken} from "../userSlice";
 
 export const createSocketMiddleware = (wsActions: TWSActions): Middleware => {
@@ -28,7 +27,7 @@ export const createSocketMiddleware = (wsActions: TWSActions): Middleware => {
                 socket.onmessage = (event: MessageEvent) => {
                     const { data } = event;
                     const parsedData: OrderListResponse = JSON.parse(data);
-                    dispatch(setOrders(parsedData));
+                    dispatch(wsActions.webSocketMessage(parsedData));
                     if (parsedData?.message === 'Token is invalid') {
                         dispatch(fetchRefreshAccessToken()).then(() => dispatch(wsActions.websocketStartConnecting(action.payload!)));
                     }

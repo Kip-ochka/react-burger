@@ -5,17 +5,13 @@ import {request} from "../utils/helpers/checkResponse";
 export const fetchPostOrder = createAsyncThunk(
     'order/postOrder',
     async (orderData: { ingredients: string[] }, {rejectWithValue}) => {
-        try {
-            return await request('/orders', {
-                method: 'POST',
-                headers: {
-                    'Content-Type': 'application/json',
-                },
-                body: JSON.stringify(orderData),
-            })
-        } catch (e) {
-            rejectWithValue(e as string)
-        }
+        return await request('/orders', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json', Authorization: localStorage.getItem('access')!,
+            },
+            body: JSON.stringify(orderData),
+        })
     }
 )
 
@@ -59,9 +55,9 @@ const orderSlice = createSlice({
             })
             .addCase(fetchPostOrder.rejected, (state, action) => {
                 state.orderLoading = false
-                state.orderError = `Заказ не был создан, по причине: ${action.payload}`
+                state.orderError = `Заказ не был создан, по причине: ${action.error.message}`
             })
     },
 })
-export const {cleanError, setError, clearOrders,setOrders} = orderSlice.actions
+export const {cleanError, setError, clearOrders, setOrders} = orderSlice.actions
 export default orderSlice.reducer

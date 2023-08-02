@@ -1,7 +1,7 @@
 import { configureStore } from '@reduxjs/toolkit'
 import burgerConstructorSlice from './burgerConstructorSlice'
 import ingridientsSlice from './ingridientsSlice'
-import orderSlice from './orderSlice'
+import orderSlice, {setOrders} from './orderSlice'
 import userSlice from './userSlice'
 import socketSlice from "./socketSlice";
 import {TWSActions} from "../types/socket";
@@ -17,7 +17,8 @@ const wsActions: TWSActions = {
   websocketStartConnecting,
   websocketConnecting,
   websocketDisconnecting,
-  webSocketError
+  webSocketError,
+  webSocketMessage: setOrders
 }
 
 const socketMiddleware = createSocketMiddleware(wsActions);

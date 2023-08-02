@@ -8,6 +8,8 @@ import {setIngredientsToPage} from "../../store/ingridientsSlice";
 import {Modal} from "../Modal/Modal";
 import {IngredientDetails} from "../IngredientDetails/IngredientDetails";
 import OrderDetailsInfo from "../OrderDetailsInfo/OrderDetailsInfo";
+import {ProtectedRoute} from "../../hoc/ProtectedRoute";
+import {DetailPage} from "../../pages/DetailPage";
 
 const AppRoutes: FC = () => {
     const location = useLocation();
@@ -23,7 +25,7 @@ const AppRoutes: FC = () => {
 
     const handleCloseOrder = useCallback(() => {
         navigate(-1)
-    }, [ navigate])
+    }, [navigate])
 
     return (
         <Suspense
@@ -43,6 +45,20 @@ const AppRoutes: FC = () => {
                         />
                     )
                 })}
+                <Route
+                    path={'/profile/orders/:id'}
+                    element={
+                        <ProtectedRoute
+                            background={background}
+                            element={
+                                <PageLayout>
+                                    <DetailPage>
+                                        <OrderDetailsInfo/>
+                                    </DetailPage>
+                                </PageLayout>
+                            }
+                        />}
+                />
             </Routes>
             {background && (
                 <Routes>
@@ -50,7 +66,7 @@ const AppRoutes: FC = () => {
                         path="/ingredients/:id"
                         element={
                             <Modal onClose={handleClose} title={"Детали ингредиента"}>
-                                <IngredientDetails />
+                                <IngredientDetails/>
                             </Modal>
                         }
                     />

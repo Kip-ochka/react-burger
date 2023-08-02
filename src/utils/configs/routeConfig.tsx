@@ -19,7 +19,7 @@ export enum AppRoutes {
     FORGOT_PASSWORD = 'forgot-password',
     RESET_PASSWORD = 'reset-password',
     PROFILE = 'profile',
-    PROFILE_ORDER_ID = 'profile-order-id',
+    PROFILE_ORDERS = 'profile-orders',
     INGREDIENTS_ID = 'ingredients-id',
     NOT_FOUND = 'not_found',
     FEED = 'feed',
@@ -32,8 +32,8 @@ export const RoutePath: Record<AppRoutes, string> = {
     [AppRoutes.REGISTER]: '/register',
     [AppRoutes.FORGOT_PASSWORD]: '/forgot-password',
     [AppRoutes.RESET_PASSWORD]: '/reset-password',
-    [AppRoutes.PROFILE]: '/profile/*',
-    [AppRoutes.PROFILE_ORDER_ID]: '/profile/orders/:id',
+    [AppRoutes.PROFILE]: '/profile',
+    [AppRoutes.PROFILE_ORDERS]: '/profile/orders',
     [AppRoutes.INGREDIENTS_ID]: '/ingredients/:id',
     [AppRoutes.FEED]: '/feed',
     [AppRoutes.FEED_ID]: '/feed/:id',
@@ -66,12 +66,9 @@ export const routeConfig: Record<AppRoutes, RouteProps> = {
         path: RoutePath.profile,
         element: <ProtectedRoute element={<ProfilePage/>}/>,
     },
-    [AppRoutes.PROFILE_ORDER_ID]: {
-        path: RoutePath['profile-order-id'],
-        element: <ProtectedRoute element={
-            <DetailPage>
-                <OrderDetailsInfo/>
-            </DetailPage>}/>,
+    [AppRoutes.PROFILE_ORDERS]: {
+        path: RoutePath['profile-orders'],
+        element: <ProtectedRoute element={<ProfilePage/>}/>,
     },
     [AppRoutes.INGREDIENTS_ID]: {
         path: RoutePath['ingredients-id'],
