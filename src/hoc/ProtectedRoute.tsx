@@ -1,7 +1,6 @@
 import {FC} from "react";
 import {Navigate, useLocation} from "react-router-dom";
 import {useAppSelector} from "../utils/hooks/reduxTypedHooks";
-import Preloader from "../components/Preloader/Preloader";
 
 
 interface ProtectedRouteProps {
@@ -10,13 +9,13 @@ interface ProtectedRouteProps {
     background?: Location;
 }
 
-export const ProtectedRoute: FC<ProtectedRouteProps> = ({element, anonymous = false, background = null}) => {
+export const ProtectedRoute: FC<ProtectedRouteProps> = ({element, anonymous = false, background}) => {
     const isLogged = useAppSelector((store) => store.user.isLogged);
     const location = useLocation();
     const from = location.state?.from || '/';
 
-    if (background && !isLogged) {
-        return <Preloader/>
+    if ((location.pathname === '/profile/orders' || location.pathname === '/feed' || background) && !isLogged) {
+        return null
     }
 
     if (anonymous && isLogged) {

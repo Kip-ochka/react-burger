@@ -47,17 +47,16 @@ const OrderItem: FC<OrderItemInterface> = ({order, withStatus}) => {
                 ? 'Готовится' : order.status === 'created'
                     ? 'Создан' : ''
 
+        const state = {background: location, orderNumber: order.number}
+
         return (
-            <li className={cls.li}>
-                <Link
-                    key={order._id}
-                    to={checkLocation}
-                    state={{
-                        background: location,
-                        orderNumber: order.number
-                    }}
-                    className={cls.link}
-                >
+            <Link
+                key={order._id}
+                to={checkLocation}
+                state={state}
+                className={cls.link}
+            >
+                <li className={cls.li}>
                     <div className={cls.top}>
                         <p
                             className={classNames(TEXT, {}, [TypografyTheme.digitsDefault])}
@@ -101,8 +100,9 @@ const OrderItem: FC<OrderItemInterface> = ({order, withStatus}) => {
                             <CurrencyIcon type='primary'/>
                         </div>
                     </ul>
-                </Link>
-            </li>
+                </li>
+            </Link>
+
         );
     }
 ;

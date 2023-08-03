@@ -1,6 +1,5 @@
 import {FC, Suspense, useCallback, useMemo} from 'react'
 import {Route, Routes, useLocation, useNavigate} from 'react-router-dom'
-import {routeConfig} from '../../utils/configs/routeConfig'
 import {PageLayout} from '../PageLayout/PageLayout'
 import Preloader from '../Preloader/Preloader'
 import {useAppDispatch} from "../../utils/hooks/reduxTypedHooks";
@@ -10,6 +9,14 @@ import {IngredientDetails} from "../IngredientDetails/IngredientDetails";
 import OrderDetailsInfo from "../OrderDetailsInfo/OrderDetailsInfo";
 import {ProtectedRoute} from "../../hoc/ProtectedRoute";
 import {DetailPage} from "../../pages/DetailPage";
+import {ConstructorPage} from "../../pages/ConstructorPage";
+import {ProfilePage} from "../../pages/ProfilePage";
+import {FeedPage} from "../../pages/FeedPage";
+import {LoginPage} from "../../pages/LoginPage";
+import {RegisterPage} from "../../pages/RegisterPage";
+import {ForgotPasswordPage} from "../../pages/ForgotPassword";
+import {ResetPasswordPage} from "../../pages/ResetPasswordPage";
+import {NotFoundPage} from "../../pages/NotFoundPage";
 
 const AppRoutes: FC = () => {
     const location = useLocation();
@@ -17,7 +24,6 @@ const AppRoutes: FC = () => {
     const orderNumber = useMemo(() => location.state && location.state.orderNumber, [location.state])
     const dispatch = useAppDispatch()
     const navigate = useNavigate()
-
     const handleClose = useCallback(() => {
         dispatch(setIngredientsToPage(null))
         navigate(-1)
@@ -28,67 +34,157 @@ const AppRoutes: FC = () => {
     }, [navigate])
 
     return (
-        <Suspense
-            fallback={
-                <PageLayout>
-                    <Preloader/>
-                </PageLayout>
-            }
-        >
-            <Routes location={background || location}>
-                {Object.values(routeConfig).map(({element, path}) => {
-                    return (
-                        <Route
-                            key={path}
-                            path={path}
-                            element={<PageLayout>{element}</PageLayout>}
-                        />
-                    )
-                })}
-                <Route
-                    path={'/profile/orders/:id'}
-                    element={
-                        <ProtectedRoute
-                            background={background}
-                            element={
-                                <PageLayout>
-                                    <DetailPage>
-                                        <OrderDetailsInfo/>
-                                    </DetailPage>
-                                </PageLayout>
-                            }
-                        />}
-                />
-            </Routes>
-            {background && (
-                <Routes>
+        (
+            <Suspense
+                fallback={
+                    <PageLayout>
+                        <Preloader/>
+                    </PageLayout>
+                }
+            >
+                <Routes location={background || location}>
                     <Route
-                        path="/ingredients/:id"
+                        path='/'
                         element={
-                            <Modal onClose={handleClose} title={"Детали ингредиента"}>
+                            <ConstructorPage/>
+                        }
+                    />
+                    <Route
+                        path='/profile'
+                        element={
+                            <ProtectedRoute
+                                element={<ProfilePage/>}
+                            />
+                        }
+                    />
+                    <Route
+                        path='/profile/orders'
+                        element={
+                            <ProtectedRoute
+                                element={
+                                    <ProfilePage/>
+                                }
+                            />}
+                    />
+                    <Route
+                        path={'/profile/orders/:id'}
+                        element={
+                            <ProtectedRoute
+                                background={background}
+                                element={
+                                    <PageLayout>
+                                        <DetailPage>
+                                            <OrderDetailsInfo/>
+                                        </DetailPage>
+                                    </PageLayout>
+                                }
+                            />
+                        }
+                    />
+                    <Route
+                        path='/feed'
+                        element={<FeedPage/>}
+                    />
+                    <Route
+                        path='/feed/:id'
+                        element={
+                            <PageLayout>
+                                <DetailPage>
+                                    <OrderDetailsInfo/>
+                                </DetailPage>
+                            </PageLayout>
+                        }
+                    />
+                    <Route
+                        path='/ingredients/:id'
+                        element={
+                            <DetailPage
+                                title={'Детали ингридиента'}
+                            >
                                 <IngredientDetails/>
-                            </Modal>
+                            </DetailPage>}/>
+                    <Route
+                        path='/login'
+                        element={
+                            <ProtectedRoute
+                                anonymous
+                                element={<LoginPage/>}
+                            />
                         }
                     />
                     <Route
-                        path="/feed/:id"
+                        path='/register'
                         element={
-                            <Modal onClose={handleCloseOrder} title={`#${orderNumber}` || ''}>
-                                <OrderDetailsInfo withoutHeader/>
-                            </Modal>
+                            <ProtectedRoute
+                                anonymous
+                                element={<RegisterPage/>}
+                            />
                         }
                     />
                     <Route
-                        path="/profile/orders/:id"
+                        path='/forgot-password'
                         element={
-                            <Modal onClose={handleCloseOrder} title={`#${orderNumber}` || ''}>
-                                <OrderDetailsInfo withoutHeader/>
-                            </Modal>
+                            <
+                                ProtectedRoute
+                                anonymous
+                                element={
+                                    <ForgotPasswordPage/>
+                                }
+                            />
+                        }
+                    />
+                    <Route
+                        path='/reset-password'
+                        element={
+                            <ProtectedRoute
+                                anonymous
+                                element={
+                                    <ResetPasswordPage/>
+                                }
+                            />
+                        }
+                    />
+                    <Route
+                        path='*'
+                        element={
+                            <NotFoundPage/>
                         }
                     />
                 </Routes>
-            )}
-        </Suspense>
+                {background && (
+                    <Routes>
+                        <Route
+                            path="/ingredients/:id"
+                            element={
+                                <Modal onClose={handleClose} title={"Детали ингредиента"}>
+                                    <IngredientDetails/>
+                                </Modal>
+                            }
+                        />
+                        <Route
+                            path="/feed/:id"
+                            element={
+                                <Modal onClose={handleCloseOrder} title={`#${orderNumber}` || ''}>
+                                    <OrderDetailsInfo withoutHeader/>
+                                </Modal>
+                            }
+                        />
+                        <Route
+                            path="/profile/orders/:id"
+                            element={
+                                <Modal
+                                    onClose={handleCloseOrder}
+                                    title={`#${orderNumber}` || ''}
+                                >
+                                    <OrderDetailsInfo withoutHeader/>
+                                </Modal>
+                            }
+                        />
+                    </Routes>
+                )}
+
+            </Suspense>
+        )
     )
 }
 

@@ -107,6 +107,7 @@ const userSlice = createSlice({
     reducers: {
         setError: (state, action) => {
             state.error = action.payload
+            state.userLoading = false
         }
     },
     extraReducers: (builder) => {
@@ -213,7 +214,6 @@ const userSlice = createSlice({
                 if (action.error) {
                     state.error = action.error.message
                 }
-                state.userLoading = false
             })
             .addCase(fetchLogout.pending, (state) => {
                 state.error = null
@@ -250,7 +250,6 @@ const userSlice = createSlice({
                 if (action.error) {
                     state.error = action.error.message
                 }
-                state.userLoading = false
             })
             .addCase(setUser.pending, (state) => {
                 state.error = null
