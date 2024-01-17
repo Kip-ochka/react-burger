@@ -81,5 +81,5 @@ export interface UserState {
     userLoading: boolean
     isLogged: boolean
     user: User
-    error: null | string
+    error: null | string | undefined
 }

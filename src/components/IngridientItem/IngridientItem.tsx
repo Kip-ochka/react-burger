@@ -45,12 +45,13 @@ export const IngridientItem: FC<IngridientItemProps> = (props) => {
             ])}
             ref={dragRef}
             draggable={true}
+            onClick={() => {
+                handleOpenInfo(ingridient)
+            }}
         >
             <li
                 className={classNames(cls.container)}
-                onClick={() => {
-                    handleOpenInfo(ingridient)
-                }}
+
             >
                 <img
                     src={ingridient.image}

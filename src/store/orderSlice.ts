@@ -1,21 +1,17 @@
-import {createAsyncThunk, createSlice} from '@reduxjs/toolkit'
-import {OrderSlice, OutcomingOrder} from '../types/orderTypes'
+import {createAsyncThunk, createSlice, PayloadAction} from '@reduxjs/toolkit'
+import {OrderListResponse, OrderSlice, OutcomingOrder} from '../types/orderTypes'
 import {request} from "../utils/helpers/checkResponse";
 
 export const fetchPostOrder = createAsyncThunk(
     'order/postOrder',
     async (orderData: { ingredients: string[] }, {rejectWithValue}) => {
-        try {
-            return await request('/orders', {
-                method: 'POST',
-                headers: {
-                    'Content-Type': 'application/json',
-                },
-                body: JSON.stringify(orderData),
-            })
-        } catch (e) {
-            rejectWithValue(e as string)
-        }
+        return await request('/orders', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json', Authorization: localStorage.getItem('access')!,
+            },
+            body: JSON.stringify(orderData),
+        })
     }
 )
 
@@ -25,6 +21,9 @@ const orderSlice = createSlice({
         orderLoading: false,
         orderError: null,
         order: {} as OutcomingOrder,
+        orders: [],
+        total: null,
+        totalToday: null,
     } as OrderSlice,
     reducers: {
         cleanError: (state) => {
@@ -33,6 +32,16 @@ const orderSlice = createSlice({
         setError: (state, action) => {
             state.orderError = action.payload
         },
+        clearOrders: (state) => {
+            state.orders = [];
+            state.total = null;
+            state.totalToday = null;
+        },
+        setOrders: (state, action: PayloadAction<OrderListResponse>) => {
+            state.orders = action.payload.orders.reverse();
+            state.total = action.payload.total;
+            state.totalToday = action.payload.totalToday;
+        }
     },
     extraReducers: (builder) => {
         builder
@@ -46,9 +55,9 @@ const orderSlice = createSlice({
             })
             .addCase(fetchPostOrder.rejected, (state, action) => {
                 state.orderLoading = false
-                state.orderError = `Заказ не был создан, по причине: ${action.payload}`
+                state.orderError = `Заказ не был создан, по причине: ${action.error.message}`
             })
     },
 })
-export const {cleanError, setError} = orderSlice.actions
+export const {cleanError, setError, clearOrders, setOrders} = orderSlice.actions
 export default orderSlice.reducer

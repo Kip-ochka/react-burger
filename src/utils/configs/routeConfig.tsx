@@ -7,8 +7,10 @@ import {ProfilePage} from '../../pages/ProfilePage'
 import {RegisterPage} from '../../pages/RegisterPage'
 import {ResetPasswordPage} from '../../pages/ResetPasswordPage'
 import {ProtectedRoute} from "../../hoc/ProtectedRoute";
-import {IngredientPage} from "../../pages/IngredientPage";
+import {DetailPage} from "../../pages/DetailPage";
 import {IngredientDetails} from "../../components/IngredientDetails/IngredientDetails";
+import {FeedPage} from "../../pages/FeedPage";
+import OrderDetailsInfo from "../../components/OrderDetailsInfo/OrderDetailsInfo";
 
 export enum AppRoutes {
     MAIN = 'main',
@@ -17,8 +19,11 @@ export enum AppRoutes {
     FORGOT_PASSWORD = 'forgot-password',
     RESET_PASSWORD = 'reset-password',
     PROFILE = 'profile',
+    PROFILE_ORDERS = 'profile-orders',
     INGREDIENTS_ID = 'ingredients-id',
     NOT_FOUND = 'not_found',
+    FEED = 'feed',
+    FEED_ID = 'feed-id',
 }
 
 export const RoutePath: Record<AppRoutes, string> = {
@@ -27,8 +32,11 @@ export const RoutePath: Record<AppRoutes, string> = {
     [AppRoutes.REGISTER]: '/register',
     [AppRoutes.FORGOT_PASSWORD]: '/forgot-password',
     [AppRoutes.RESET_PASSWORD]: '/reset-password',
-    [AppRoutes.PROFILE]: '/profile/*',
+    [AppRoutes.PROFILE]: '/profile',
+    [AppRoutes.PROFILE_ORDERS]: '/profile/orders',
     [AppRoutes.INGREDIENTS_ID]: '/ingredients/:id',
+    [AppRoutes.FEED]: '/feed',
+    [AppRoutes.FEED_ID]: '/feed/:id',
     //последний
     [AppRoutes.NOT_FOUND]: '*',
 }
@@ -58,12 +66,28 @@ export const routeConfig: Record<AppRoutes, RouteProps> = {
         path: RoutePath.profile,
         element: <ProtectedRoute element={<ProfilePage/>}/>,
     },
+    [AppRoutes.PROFILE_ORDERS]: {
+        path: RoutePath['profile-orders'],
+        element: <ProtectedRoute element={<ProfilePage/>}/>,
+    },
     [AppRoutes.INGREDIENTS_ID]: {
         path: RoutePath['ingredients-id'],
         element: (
-            <IngredientPage>
-                <IngredientDetails />
-            </IngredientPage>)
+            <DetailPage title={'Детали ингридиента'}>
+                <IngredientDetails/>
+            </DetailPage>)
+    },
+    [AppRoutes.FEED]: {
+        path: RoutePath['feed'],
+        element: (<FeedPage/>),
+    },
+    [AppRoutes.FEED_ID]: {
+        path: RoutePath['feed-id'],
+        element: (
+            <DetailPage>
+                <OrderDetailsInfo/>
+            </DetailPage>
+        ),
     },
     [AppRoutes.NOT_FOUND]: {
         path: RoutePath.not_found,

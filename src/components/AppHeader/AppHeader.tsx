@@ -41,7 +41,7 @@ export const AppHeader: FC = React.memo(() => {
           </NavLink>
 
           <NavLink
-            to="/orderlist"
+            to="/feed"
             className={classNames(cls.navLink, {}, [
               'pl-5',
               'pr-5',

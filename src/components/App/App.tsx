@@ -19,7 +19,6 @@ export const App: FC = () => {
     useEffect(() => {
         dispatch(fetchGetIngridients())
         dispatch(getUser()).then((res) => {
-            console.log(res)
             if ((res.payload=== 'Ошибка 401'||res.payload==='Ошибка 403')&&localStorage.getItem('refresh')) {
                 dispatch(fetchRefreshAccessToken()).then(res => {
                     dispatch(getUser())

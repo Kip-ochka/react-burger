@@ -1,4 +1,4 @@
-import {FC, useEffect} from 'react'
+import React, {FC, useEffect} from 'react'
 import {classNames} from '../../utils/helpers/classNames'
 import {TEXT, TypografyTheme} from '../../utils/variables'
 import cls from './IngredientDetails.module.css'

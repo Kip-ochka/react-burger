@@ -16,7 +16,7 @@ const ConstructorPage: FC<ConstructorPageProps> = memo(() => {
     const {isModalOpen, openModal, closeModal} = useModal()
 
     return (
-        <main className={classNames(cls.page)}>
+        <section className={classNames(cls.page)}>
             <DndProvider backend={HTML5Backend}>
                 <BurgerIngredients/>
                 <BurgerConstructor onOpenOrder={openModal}/>
@@ -27,7 +27,7 @@ const ConstructorPage: FC<ConstructorPageProps> = memo(() => {
                 children={<OrderDetails/>}
             />)}
 
-        </main>
+        </section>
     )
 })
 
